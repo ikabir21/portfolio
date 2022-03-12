@@ -14,6 +14,9 @@ const theme = createTheme({
   // },
   typography: {
     fontFamily: ["Ubuntu", "sans-serif"].join(","),
+    body1: {
+      fontSize: "0.9rem"
+    },
     button: {
       textTransform: "inherit"
     }

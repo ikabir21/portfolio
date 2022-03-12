@@ -1,7 +1,7 @@
 import { SvgIcon } from "@mui/material";
 import React from "react";
 
-const Back = (props) => {
+const BackIcon = (props) => {
   return (
     <SvgIcon {...props} viewBox="0 0 50 50">
       <path
@@ -14,4 +14,4 @@ const Back = (props) => {
   );
 };
 
-export default Back;
+export default BackIcon;

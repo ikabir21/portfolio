@@ -1,29 +1,119 @@
 import React, { useState, useEffect } from "react";
+
+// @mui/material imports
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import User from "../assets/svg/User";
-import {
-  Avatar,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography
-} from "@mui/material";
+import UserIcon from "../assets/svg/UserIcon";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+
+// @mui/styles imports
+
+import makeStyles from "@mui/styles/makeStyles";
+import styled from "@mui/styles/styled";
+import withStyles from "@mui/styles/withStyles";
+
+// project imports
+
+import { getCurrentTime } from "../utils/time";
+
 import Logo from "../assets/svg/Logo";
-import Back from "../assets/svg/Back";
-import EyeOff from "../assets/svg/EyeOff";
-import EyeOn from "../assets/svg/EyeOn";
+import BackIcon from "../assets/svg/BackIcon";
+import EyeOffIcon from "../assets/svg/EyeOffIcon";
+import EyeOnIcon from "../assets/svg/EyeOnIcon";
 import PropTypes from "prop-types";
 import Spinner from "../assets/svg/Spinner";
-import Next from "../assets/svg/Next";
+import NextIcon from "../assets/svg/NextIcon";
+
+// JSS for LockScreen
+
+const useStyles = makeStyles({
+  toolBar: {
+    minHeight: "100% !important",
+    justifyContent: "space-between",
+    cursor: "default"
+  },
+  list: {
+    padding: "0 1ch",
+    borderBottom: "2px solid #E95420"
+  },
+  textField: {
+    borderRadius: "4px",
+    "& input": {
+      fontSize: "14px",
+      p: "1ch",
+      maxWidth: "180px",
+      color: "#333"
+    },
+    "& fieldset": {
+      border: "2px solid #E95420 !important"
+    },
+
+    "& .MuiOutlinedInput-root": {
+      background: "#eee",
+      pr: "0.5ch"
+    },
+    "& .MuiFormHelperText-root": {
+      color: "#eee",
+      position: "absolute",
+      bottom: "-25px",
+      left: "-10px"
+    }
+  }
+});
+
+// Custom User component
+
+const CutsomUser = withStyles({
+  btn: {
+    width: "250px",
+    textTransform: "inherit",
+    justifyContent: "start !important",
+    color: "inherit !important",
+    align: "left",
+    padding: "0.5ch 1ch",
+    "&:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.04) !important"
+    }
+  },
+  user: {
+    width: "48px !important",
+    height: "48px !important",
+    backgroundColor: "rgba(255, 255, 255, 0.05) !important"
+  }
+})((props) => {
+  const { children, classes } = props;
+  return (
+    <Button
+      {...props}
+      className={classes.btn}
+      startIcon={
+        <Avatar className={classes.user}>
+          <UserIcon />
+        </Avatar>
+      }
+    >
+      {children}
+    </Button>
+  );
+});
+
+// Login UI
 
 const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
   const [isPassword, setIsPassword] = useState(true);
   const [password, setPassword] = useState("sudo login");
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
+
+  const classes = useStyles();
 
   useEffect(() => {
     if (isLoading) {
@@ -50,8 +140,8 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
 
   return (
     <Stack spacing={1} alignItems="center">
-      <Avatar sx={{ width: 72, height: 72, backgroundColor: "rgba(255, 255, 255, 0.05)" }}>
-        <User sx={{ width: "48px", height: "48px" }} />
+      <Avatar sx={{ width: 72, height: 72, background: "rgba(255, 255, 255, 0.05)" }}>
+        <UserIcon sx={{ width: "48px", height: "48px" }} />
       </Avatar>
       <Typography>{isSaved && "Ichan Kabir"}</Typography>
       <Stack alignItems="center" spacing={1} direction="row">
@@ -67,45 +157,23 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
           }}
           size="small"
         >
-          <Back sx={{ fontSize: "1.4rem" }} />
+          <BackIcon sx={{ fontSize: "1.4rem" }} />
         </IconButton>
         <form onSubmit={handleSubmit}>
           <TextField
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             size="small"
-            sx={{
-              borderRadius: "4px",
-              "& input": {
-                fontSize: "14px",
-                p: "1ch",
-                maxWidth: "180px",
-                color: "#333"
-              },
-              "& fieldset": {
-                border: "2px solid #E95420 !important"
-              },
-
-              "& .MuiOutlinedInput-root": {
-                background: "#eee",
-                pr: "0.5ch"
-              },
-              "& .MuiFormHelperText-root": {
-                color: "#eee",
-                position: "absolute",
-                bottom: "-25px",
-                left: "-10px"
-              }
-            }}
+            className={classes.textField}
             placeholder="Password"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={() => setIsPassword(!isPassword)} size="small">
                     {isPassword ? (
-                      <EyeOff sx={{ fontSize: "18px" }} />
+                      <EyeOffIcon sx={{ fontSize: "18px" }} />
                     ) : (
-                      <EyeOn sx={{ fontSize: "18px" }} />
+                      <EyeOnIcon sx={{ fontSize: "18px" }} />
                     )}
                   </IconButton>
                 </InputAdornment>
@@ -126,7 +194,7 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
             sx={{ backgroundColor: "rgba(255, 255, 255, 0.04)", marginLeft: "4px" }}
             onClick={() => setLoading(!isLoading)}
           >
-            <Next sx={{ fontSize: "1rem", color: "#eee" }} />
+            <NextIcon sx={{ fontSize: "1rem", color: "#eee" }} />
           </IconButton>
         )}
       </Stack>
@@ -144,15 +212,36 @@ Login.propTypes = {
 const LockScreen = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
+  const [date, setDate] = useState(new Date());
+
+  const classes = useStyles();
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setDate(new Date());
+  //   }, 1000);
+  // }, [new Date()]);
 
   const handleShowLogin = () => setShowLogin((state) => !state);
+
+  const ToolBar = (
+    <AppBar elevation={0} sx={{ maxHeight: "3ch", backgroundColor: "#4F194D" }} position="absolute">
+      <Toolbar variant="dense" className={classes.toolBar} disableGutters>
+        <Typography variant="body1" className={classes.list}>
+          Activities
+        </Typography>
+        <Typography>{getCurrentTime(date)}</Typography>
+        <Typography>Menu</Typography>
+      </Toolbar>
+    </AppBar>
+  );
 
   return (
     <Box
       display="flex"
       alignItems="center"
       justifyContent="center"
-      width="100vw"
+      width="100%"
       height="100vh"
       bgcolor="#4F194D"
       color="grey.50"
@@ -160,35 +249,15 @@ const LockScreen = () => {
     >
       {/* Users */}
 
+      {ToolBar}
+
       <Box>
         {!showLogin ? (
           <>
-            <Box align="start">
-              <Button
-                onClick={handleShowLogin}
-                disableRipple
-                startIcon={
-                  <Avatar
-                    sx={{ width: 48, height: 48, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-                  >
-                    <User />
-                  </Avatar>
-                }
-                sx={{
-                  width: "250px",
-                  textTransform: "inherit",
-                  justifyContent: "start",
-                  color: "inherit",
-                  align: "left",
-                  padding: "0.5ch 1ch",
-                  marginBottom: "1ch",
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.04)"
-                  }
-                }}
-              >
+            <Box mb={1} align="start">
+              <CutsomUser username="Ichan Kabir" onClick={handleShowLogin} disableRipple>
                 Ichan Kabir
-              </Button>
+              </CutsomUser>
             </Box>
             <Box align="start">
               <Typography

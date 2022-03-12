@@ -1,7 +1,7 @@
 import { SvgIcon } from "@mui/material";
 import React from "react";
 
-const EyeOff = (props) => {
+const EyeOffIcon = (props) => {
   return (
     <SvgIcon {...props} viewBox="0 0 100 100">
       <g fill="none" transform="translate(1.000000, 2.000000)" stroke="#333" strokeWidth="4">
@@ -20,4 +20,4 @@ const EyeOff = (props) => {
   );
 };
 
-export default EyeOff;
+export default EyeOffIcon;

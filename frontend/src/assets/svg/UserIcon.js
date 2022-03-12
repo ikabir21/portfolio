@@ -1,7 +1,7 @@
 import { SvgIcon } from "@mui/material";
 import React from "react";
 
-const User = (props) => {
+const UserIcon = (props) => {
   return (
     <SvgIcon sx={{ width: "36px", height: "36px" }} {...props}>
       <svg
@@ -21,4 +21,4 @@ const User = (props) => {
   );
 };
 
-export default User;
+export default UserIcon;
