@@ -13,11 +13,17 @@ import TextField from "@mui/material/TextField";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Paper from "@mui/material/Paper";
 
 // @mui/styles imports
 
 import makeStyles from "@mui/styles/makeStyles";
-import styled from "@mui/styles/styled";
 import withStyles from "@mui/styles/withStyles";
 
 // project imports
@@ -31,6 +37,13 @@ import EyeOnIcon from "../assets/svg/EyeOnIcon";
 import PropTypes from "prop-types";
 import Spinner from "../assets/svg/Spinner";
 import NextIcon from "../assets/svg/NextIcon";
+import ArrowDownIcon from "../assets/svg/ArrowDownIcon";
+import BatteryIcon from "../assets/svg/BatteryIcon";
+import SpeakerIcon from "../assets/svg/SpeakerIcon";
+import BlueToothIcon from "../assets/svg/BlueToothIcon";
+import WifiIcon from "../assets/svg/WifiIcon";
+import NightModeIcon from "../assets/svg/NightModeIcon";
+import UpIcon from "../assets/svg/UpIcon";
 
 // JSS for LockScreen
 
@@ -38,11 +51,18 @@ const useStyles = makeStyles({
   toolBar: {
     minHeight: "100% !important",
     justifyContent: "space-between",
-    cursor: "default"
+    cursor: "default",
+    paddingTop: "0.5ch"
   },
   list: {
     padding: "0 1ch",
     borderBottom: "2px solid #E95420"
+  },
+  up: {
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+    top: "90%"
   },
   textField: {
     borderRadius: "4px",
@@ -73,6 +93,7 @@ const useStyles = makeStyles({
 
 const CutsomUser = withStyles({
   btn: {
+    cursor: "default !important",
     width: "250px",
     textTransform: "inherit",
     justifyContent: "start !important",
@@ -213,14 +234,20 @@ const LockScreen = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
   const [date, setDate] = useState(new Date());
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const classes = useStyles();
 
   // useEffect(() => {
-  //   setTimeout(() => {
+  //   const interval = setInterval(() => {
   //     setDate(new Date());
   //   }, 1000);
-  // }, [new Date()]);
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  const handleClose = () => setAnchorEl(null);
+
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
 
   const handleShowLogin = () => setShowLogin((state) => !state);
 
@@ -230,8 +257,104 @@ const LockScreen = () => {
         <Typography variant="body1" className={classes.list}>
           Activities
         </Typography>
-        <Typography>{getCurrentTime(date)}</Typography>
-        <Typography>Menu</Typography>
+        <Typography variant="body1" className={classes.list}>
+          {getCurrentTime(date)}
+        </Typography>
+        <Stack
+          aria-controls="menu-popular-card"
+          aria-haspopup="true"
+          onClick={handleClick}
+          direction="row"
+          alignItems="center"
+          className={classes.list}
+          spacing={0.5}
+          sx={{ position: "relative" }}
+        >
+          <NightModeIcon fontSize="small" />
+          <WifiIcon fontSize="small" />
+          <BlueToothIcon fontSize="small" />
+          <SpeakerIcon fontSize="small" />
+          <Stack direction="row" alignItems="center">
+            <BatteryIcon fontSize="small" />
+            <Typography align="center" variant="caption">
+              100%
+            </Typography>
+          </Stack>
+          <ArrowDownIcon />
+          <UpIcon
+            sx={{
+              opacity: anchorEl ? 1 : 0,
+              transition: "opacity 260ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
+            }}
+            className={classes.up}
+          />
+        </Stack>
+        <Menu
+          id="menu-popular-card"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          variant="selectedMenu"
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+          sx={{ marginTop: "1.5ch" }}
+        >
+          <Paper
+            elevation={0}
+            sx={{
+              width: 300,
+              maxWidth: "100%",
+              p: 0,
+              "& .MuiList-root": {
+                padding: 0
+              }
+            }}
+          >
+            <MenuList>
+              <MenuItem>
+                <ListItemIcon>
+                  <WifiIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Cut</ListItemText>
+                <Typography variant="body2" color="text.secondary">
+                  ⌘X
+                </Typography>
+              </MenuItem>
+              <MenuItem>
+                <ListItemIcon>
+                  <WifiIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Copy</ListItemText>
+                <Typography variant="body2" color="text.secondary">
+                  ⌘C
+                </Typography>
+              </MenuItem>
+              <MenuItem>
+                <ListItemIcon>
+                  <WifiIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Paste</ListItemText>
+                <Typography variant="body2" color="text.secondary">
+                  ⌘V
+                </Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem>
+                <ListItemIcon>
+                  <WifiIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Web Clipboard</ListItemText>
+              </MenuItem>
+            </MenuList>
+          </Paper>
+        </Menu>
       </Toolbar>
     </AppBar>
   );
@@ -261,7 +384,7 @@ const LockScreen = () => {
             </Box>
             <Box align="start">
               <Typography
-                sx={{ cursor: "pointer" }}
+                // sx={{ cursor: "pointer" }}
                 onClick={() => {
                   setShowLogin(!showLogin);
                   setIsSaved(false);

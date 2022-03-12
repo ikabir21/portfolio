@@ -1,6 +1,15 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
+  components: {
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          cursor: "inherit"
+        }
+      }
+    }
+  },
   // palette: {
   //   primary: {
   //     main: "transparent"
