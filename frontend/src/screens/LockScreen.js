@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 // @mui/material imports
 
@@ -10,16 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import MenuList from "@mui/material/MenuList";
-import Paper from "@mui/material/Paper";
 
 // @mui/styles imports
 
@@ -28,42 +20,17 @@ import withStyles from "@mui/styles/withStyles";
 
 // project imports
 
-import { getCurrentTime } from "../utils/time";
-
 import Logo from "../assets/svg/Logo";
 import BackIcon from "../assets/svg/BackIcon";
 import EyeOffIcon from "../assets/svg/EyeOffIcon";
 import EyeOnIcon from "../assets/svg/EyeOnIcon";
-import PropTypes from "prop-types";
 import Spinner from "../assets/svg/Spinner";
 import NextIcon from "../assets/svg/NextIcon";
-import ArrowDownIcon from "../assets/svg/ArrowDownIcon";
-import BatteryIcon from "../assets/svg/BatteryIcon";
-import SpeakerIcon from "../assets/svg/SpeakerIcon";
-import BlueToothIcon from "../assets/svg/BlueToothIcon";
-import WifiIcon from "../assets/svg/WifiIcon";
-import NightModeIcon from "../assets/svg/NightModeIcon";
-import UpIcon from "../assets/svg/UpIcon";
+import ToolBar from "../components/ToolBar";
 
 // JSS for LockScreen
 
 const useStyles = makeStyles({
-  toolBar: {
-    minHeight: "100% !important",
-    justifyContent: "space-between",
-    cursor: "default",
-    paddingTop: "0.5ch"
-  },
-  list: {
-    padding: "0 1ch",
-    borderBottom: "2px solid #E95420"
-  },
-  up: {
-    position: "absolute",
-    left: "50%",
-    transform: "translateX(-50%)",
-    top: "90%"
-  },
   textField: {
     borderRadius: "4px",
     "& input": {
@@ -125,6 +92,18 @@ const CutsomUser = withStyles({
     </Button>
   );
 });
+
+// const Calender = () =>
+//   withStyles({})((props) => (
+//     <LocalizationProvider dateAdapter={AdapterDateFns}>
+//       <StaticDatePicker
+//         displayStaticWrapperAs="desktop"
+//         openTo="year"
+//         value={new Date()}
+//         renderInput={(params) => <TextField {...params} />}
+//       />
+//     </LocalizationProvider>
+//   ));
 
 // Login UI
 
@@ -234,7 +213,6 @@ const LockScreen = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
   const [date, setDate] = useState(new Date());
-  const [anchorEl, setAnchorEl] = useState(null);
 
   const classes = useStyles();
 
@@ -245,119 +223,7 @@ const LockScreen = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
-  const handleClose = () => setAnchorEl(null);
-
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-
   const handleShowLogin = () => setShowLogin((state) => !state);
-
-  const ToolBar = (
-    <AppBar elevation={0} sx={{ maxHeight: "3ch", backgroundColor: "#4F194D" }} position="absolute">
-      <Toolbar variant="dense" className={classes.toolBar} disableGutters>
-        <Typography variant="body1" className={classes.list}>
-          Activities
-        </Typography>
-        <Typography variant="body1" className={classes.list}>
-          {getCurrentTime(date)}
-        </Typography>
-        <Stack
-          aria-controls="menu-popular-card"
-          aria-haspopup="true"
-          onClick={handleClick}
-          direction="row"
-          alignItems="center"
-          className={classes.list}
-          spacing={0.5}
-          sx={{ position: "relative" }}
-        >
-          <NightModeIcon fontSize="small" />
-          <WifiIcon fontSize="small" />
-          <BlueToothIcon fontSize="small" />
-          <SpeakerIcon fontSize="small" />
-          <Stack direction="row" alignItems="center">
-            <BatteryIcon fontSize="small" />
-            <Typography align="center" variant="caption">
-              100%
-            </Typography>
-          </Stack>
-          <ArrowDownIcon />
-          <UpIcon
-            sx={{
-              opacity: anchorEl ? 1 : 0,
-              transition: "opacity 260ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
-            }}
-            className={classes.up}
-          />
-        </Stack>
-        <Menu
-          id="menu-popular-card"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          variant="selectedMenu"
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right"
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right"
-          }}
-          sx={{ marginTop: "1.5ch" }}
-        >
-          <Paper
-            elevation={0}
-            sx={{
-              width: 300,
-              maxWidth: "100%",
-              p: 0,
-              "& .MuiList-root": {
-                padding: 0
-              }
-            }}
-          >
-            <MenuList>
-              <MenuItem>
-                <ListItemIcon>
-                  <WifiIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Cut</ListItemText>
-                <Typography variant="body2" color="text.secondary">
-                  ⌘X
-                </Typography>
-              </MenuItem>
-              <MenuItem>
-                <ListItemIcon>
-                  <WifiIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Copy</ListItemText>
-                <Typography variant="body2" color="text.secondary">
-                  ⌘C
-                </Typography>
-              </MenuItem>
-              <MenuItem>
-                <ListItemIcon>
-                  <WifiIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Paste</ListItemText>
-                <Typography variant="body2" color="text.secondary">
-                  ⌘V
-                </Typography>
-              </MenuItem>
-              <Divider />
-              <MenuItem>
-                <ListItemIcon>
-                  <WifiIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Web Clipboard</ListItemText>
-              </MenuItem>
-            </MenuList>
-          </Paper>
-        </Menu>
-      </Toolbar>
-    </AppBar>
-  );
 
   return (
     <Box
@@ -372,7 +238,7 @@ const LockScreen = () => {
     >
       {/* Users */}
 
-      {ToolBar}
+      <ToolBar />
 
       <Box>
         {!showLogin ? (
