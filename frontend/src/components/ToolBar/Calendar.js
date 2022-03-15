@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import SortLeftIcon from "../../assets/svg/SortLeftIcon";
 import SortRightIcon from "../../assets/svg/SortRightIcon";

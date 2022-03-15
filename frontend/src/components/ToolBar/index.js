@@ -12,21 +12,13 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 
-// @mui/lab imports
-
-import CalendarPicker from "@mui/lab/CalendarPicker";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-
 // @mui/styles imports
 
 import makeStyles from "@mui/styles/makeStyles";
-import withStyles from "@mui/styles/withStyles";
 import styled from "@mui/styles/styled";
 
 import moment from "moment";
@@ -88,7 +80,7 @@ const useStyles = makeStyles({
   }
 });
 
-const CustomSwitch = styled(Switch)(({ theme }) => ({
+const CustomSwitch = styled(Switch)(() => ({
   height: "auto !important",
   paddingTop: "0 !important",
   paddingBottom: "0 !important",
@@ -120,8 +112,13 @@ const ToolBar = () => {
   const [date, setDate] = useState(new Date());
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
-
   const classes = useStyles();
+
+  useEffect(() => {
+    const interval = setInterval(() => setDate(new Date()), 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const curMonth = moment().format("MMMM");
   const curDate = moment().format("DD");
