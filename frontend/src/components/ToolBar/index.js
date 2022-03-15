@@ -13,7 +13,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import Switch from "@mui/material/Switch";
 
 // @mui/lab imports
 
@@ -25,6 +27,9 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 import makeStyles from "@mui/styles/makeStyles";
 import withStyles from "@mui/styles/withStyles";
+import styled from "@mui/styles/styled";
+
+import moment from "moment";
 
 // project imports
 
@@ -39,7 +44,7 @@ import BlueToothIcon from "../../assets/svg/BlueToothIcon";
 import WifiIcon from "../../assets/svg/WifiIcon";
 import NightModeIcon from "../../assets/svg/NightModeIcon";
 import UpIcon from "../../assets/svg/UpIcon";
-import { Container } from "@mui/material";
+import Calendar from "./Calendar";
 
 const useStyles = makeStyles({
   toolBar: {
@@ -83,32 +88,33 @@ const useStyles = makeStyles({
   }
 });
 
-const NotificationAndCalendar = withStyles({
-  root: {
-    position: "absolute !important",
-    left: "50%",
-
-    transform: "translateX(-50%)",
-    borderRadius: "4px",
-    boxShadow: "0",
-    background: "#eee",
-    "& .PrivatePickersSlideTransition-root": {
-      minHeight: "200px"
+const CustomSwitch = styled(Switch)(({ theme }) => ({
+  height: "auto !important",
+  paddingTop: "0 !important",
+  paddingBottom: "0 !important",
+  marginLeft: "-5px !important",
+  "& .MuiSwitch-switchBase": {
+    "&:hover": { backgroundColor: "transparent !important" },
+    padding: 0,
+    left: 12.5,
+    top: 1,
+    "&.Mui-checked": {
+      transform: "translateX(20px)"
     }
+  },
+  "& .MuiSwitch-thumb": {
+    width: 16,
+    height: 16,
+    backgroundColor: "#fff !important"
+  },
+  "& .MuiSwitch-track": {
+    height: 17.5,
+    minWidth: 37,
+    borderRadius: 12,
+    backgroundColor: "#CECAC5",
+    opacity: "0.8 !important"
   }
-})((props) => {
-  const { classes, date, setDate } = props;
-  console.log(props);
-  return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <CalendarPicker
-        className={classes.root}
-        date={date}
-        onChange={(newDate) => setDate(newDate)}
-      />
-    </LocalizationProvider>
-  );
-});
+}));
 
 const ToolBar = () => {
   const [date, setDate] = useState(new Date());
@@ -116,6 +122,11 @@ const ToolBar = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
 
   const classes = useStyles();
+
+  const curMonth = moment().format("MMMM");
+  const curDate = moment().format("DD");
+  const curDay = moment().format("dddd");
+  const curYear = moment().format("YYYY");
 
   const NotificationAndCalendarMenu = (
     <Menu
@@ -133,14 +144,22 @@ const ToolBar = () => {
         vertical: "top",
         horizontal: "center"
       }}
-      sx={{ marginTop: "1.5ch" }}
+      sx={{
+        marginTop: "1.5ch",
+        "& ul": {
+          padding: "12px 0 !important",
+          border: "1px solid #cdcdcd",
+          boxShadow:
+            "0px 2px 1px -1px rgba(255, 255, 255, 0.2),0px 1px 1px 0px rgba(255, 255, 255, 0.14),0px 1px 3px 0px rgba(255, 255, 255, 0.12)"
+        }
+      }}
     >
       <Paper
         elevation={0}
         sx={{
-          width: 780,
+          width: 770,
           maxWidth: "100%",
-          minHeight: 320,
+          minHeight: 360,
           p: 0,
           "& .MuiList-root": {
             padding: 0
@@ -148,16 +167,37 @@ const ToolBar = () => {
         }}
       >
         <Stack direction="row">
-          <Container sx={{ flex: 0.6 }}>
-            <Stack>
+          <Stack flex={0.62} px={3.1} pt={1}>
+            <Stack flex={1}>
               <Card sx={{ p: 1 }}>Not1</Card>
             </Stack>
-          </Container>
-          <Divider sx={{ height: "320px" }} orientation="vertical" />
-          <Container sx={{ flex: 0.4 }}>
-            <Typography variant="body1">Sunday</Typography>
-            <Typography variant="h5">March 13 2022</Typography>
-          </Container>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack direction="row" alignItems="center">
+                <Typography sx={{ letterSpacing: "-0.3px" }} variant="body1">
+                  Do Not Disturb
+                </Typography>
+                <CustomSwitch color="secondary" disableRipple />
+              </Stack>
+              <Button
+                disableRipple
+                sx={{ color: "#333", border: "1px solid #CECAC5", padding: "4px 18px" }}
+              >
+                <Typography sx={{ lineHeight: 1, color: "#444" }} variant="body1">
+                  Clear
+                </Typography>
+              </Button>
+            </Stack>
+          </Stack>
+          <Divider sx={{ height: "360px" }} orientation="vertical" />
+          <Stack flex={0.38} px={1.5} pt={1}>
+            <Typography variant="subtitle1" style={{ lineHeight: 1 }}>
+              {curDay}
+            </Typography>
+            <Typography variant="h5" mb={2.5}>
+              {curMonth} {curDate} {curYear}
+            </Typography>
+            <Calendar />
+          </Stack>
         </Stack>
       </Paper>
     </Menu>

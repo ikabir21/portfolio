@@ -10,24 +10,28 @@ const theme = createTheme({
       }
     }
   },
-  // palette: {
-  //   primary: {
-  //     main: "transparent"
-  //   },
-  //   secondary: {
-  //     main: "#4F194D"
-  //   },
-  //   action: {
-  //     hover: "rgba(255, 255, 255, 0.04)"
-  //   }
-  // },
+  palette: {
+    // primary: {
+    //   main: "transparent"
+    // },
+    secondary: {
+      main: "#772953"
+    },
+    action: {
+      hover: "rgba(255, 255, 255, 0.04)"
+    }
+  },
   typography: {
     fontFamily: ["Ubuntu", "sans-serif"].join(","),
+    color: "#333",
     body1: {
       fontSize: "0.9rem"
     },
     button: {
       textTransform: "inherit"
+    },
+    h5: {
+      color: "#444"
     }
   }
 });
