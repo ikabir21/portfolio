@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
 // @mui/material imports
@@ -27,6 +27,8 @@ import EyeOnIcon from "../assets/svg/EyeOnIcon";
 import Spinner from "../assets/svg/Spinner";
 import NextIcon from "../assets/svg/NextIcon";
 import ToolBar from "../components/ToolBar";
+
+import { AppContext } from "../context";
 
 // JSS for LockScreen
 
@@ -93,34 +95,27 @@ const CutsomUser = withStyles({
   );
 });
 
-// const Calender = () =>
-//   withStyles({})((props) => (
-//     <LocalizationProvider dateAdapter={AdapterDateFns}>
-//       <StaticDatePicker
-//         displayStaticWrapperAs="desktop"
-//         openTo="year"
-//         value={new Date()}
-//         renderInput={(params) => <TextField {...params} />}
-//       />
-//     </LocalizationProvider>
-//   ));
-
 // Login UI
 
 const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
+  const { state, actions } = useContext(AppContext);
+  const { login } = actions;
+  console.log(state, actions);
+
   const [isPassword, setIsPassword] = useState(true);
   const [password, setPassword] = useState("sudo login");
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
-
   const classes = useStyles();
 
   useEffect(() => {
     if (isLoading) {
       setTimeout(() => {
         setLoading(false);
-        if (password === "sudo login") alert("logged in");
-        else setError(true);
+        if (password === "sudo login") {
+          login({ isAuth: true });
+          alert("logged in");
+        } else setError(true);
       }, 300);
     }
   }, [isLoading]);
@@ -212,16 +207,6 @@ Login.propTypes = {
 const LockScreen = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
-  const [date, setDate] = useState(new Date());
-
-  const classes = useStyles();
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setDate(new Date());
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const handleShowLogin = () => setShowLogin((state) => !state);
 
@@ -250,7 +235,6 @@ const LockScreen = () => {
             </Box>
             <Box align="start">
               <Typography
-                // sx={{ cursor: "pointer" }}
                 onClick={() => {
                   setShowLogin(!showLogin);
                   setIsSaved(false);
