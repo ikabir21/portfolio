@@ -37,6 +37,7 @@ import WifiIcon from "../../assets/svg/WifiIcon";
 import NightModeIcon from "../../assets/svg/NightModeIcon";
 import UpIcon from "../../assets/svg/UpIcon";
 import Calendar from "./Calendar";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
   toolBar: {
@@ -108,14 +109,14 @@ const CustomSwitch = styled(Switch)(() => ({
   }
 }));
 
-const ToolBar = () => {
-  const [date, setDate] = useState(new Date());
+const ToolBar = ({ color = "#4F194D" }) => {
+  const [date, setDate] = useState(moment().format("ddd MMM DD HH:mm:ss"));
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
   const classes = useStyles();
 
   useEffect(() => {
-    const interval = setInterval(() => setDate(new Date()), 1000);
+    const interval = setInterval(() => setDate(moment().format("ddd MMM DD HH:mm:ss")), 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -270,7 +271,7 @@ const ToolBar = () => {
   );
 
   return (
-    <AppBar elevation={0} sx={{ maxHeight: "3ch", backgroundColor: "#4F194D" }} position="absolute">
+    <AppBar elevation={0} sx={{ maxHeight: "3ch", backgroundColor: color }} position="absolute">
       <Toolbar variant="dense" className={classes.toolBar} disableGutters>
         <Typography variant="body1" className={classes.list}>
           Activities
@@ -291,7 +292,7 @@ const ToolBar = () => {
             onClick={(e) => setAnchorEl1(e.currentTarget)}
             className={classes.list}
           >
-            {getCurrentTime(date)}
+            {date}
           </Typography>
         </div>
 
@@ -330,6 +331,10 @@ const ToolBar = () => {
       </Toolbar>
     </AppBar>
   );
+};
+
+ToolBar.propTypes = {
+  color: PropTypes.string
 };
 
 export default ToolBar;

@@ -103,7 +103,7 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
   console.log(state, actions);
 
   const [isPassword, setIsPassword] = useState(true);
-  const [password, setPassword] = useState("sudo login");
+  const [password, setPassword] = useState("sudo_login");
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
   const classes = useStyles();
@@ -112,9 +112,8 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
     if (isLoading) {
       setTimeout(() => {
         setLoading(false);
-        if (password === "sudo login") {
+        if (password === "sudo_login") {
           login({ isAuth: true });
-          alert("logged in");
         } else setError(true);
       }, 300);
     }
