@@ -25,7 +25,7 @@ import BackIcon from "../assets/svg/BackIcon";
 import EyeOffIcon from "../assets/svg/EyeOffIcon";
 import EyeOnIcon from "../assets/svg/EyeOnIcon";
 import Spinner from "../assets/svg/Spinner";
-import NextIcon from "../assets/svg/NextIcon";
+import GoIcon from "../assets/svg/GoIcon";
 import ToolBar from "../components/ToolBar";
 
 import { AppContext } from "../context";
@@ -188,7 +188,7 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
             sx={{ backgroundColor: "rgba(255, 255, 255, 0.04)", marginLeft: "4px" }}
             onClick={() => setLoading(!isLoading)}
           >
-            <NextIcon sx={{ fontSize: "1rem", color: "#eee" }} />
+            <GoIcon sx={{ fontSize: "1rem", color: "#eee" }} />
           </IconButton>
         )}
       </Stack>

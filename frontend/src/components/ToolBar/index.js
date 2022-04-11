@@ -25,8 +25,6 @@ import moment from "moment";
 
 // project imports
 
-import { getCurrentTime } from "../../utils/time";
-
 // assets
 import Stack from "@mui/material/Stack";
 import ArrowDownIcon from "../../assets/svg/ArrowDownIcon";
@@ -313,7 +311,7 @@ const ToolBar = ({ color = "#4F194D" }) => {
           <BlueToothIcon fontSize="small" />
           <SpeakerIcon fontSize="small" />
           <Stack direction="row" alignItems="center">
-            <BatteryIcon fontSize="small" />
+            <BatteryIcon sx={{ height: "16px" }} fontSize="small" />
             <Typography align="center" variant="caption">
               100%
             </Typography>

@@ -4,6 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 // @mui/styles imports
 
@@ -11,20 +12,23 @@ import makeStyles from "@mui/styles/makeStyles";
 
 // project imports
 
-import { HomeIcon } from "../assets/svg/apps.js";
+import { HomeIcon, TrashIcon, VsCodeIcon, SpotifyIcon } from "../assets/svg/apps";
 import { AppContext } from "../context";
 import ContextMenu from "../components/ContextMenu";
+import SideBar from "../components/ToolBar/SideBar";
 import ToolBar from "../components/ToolBar";
 import bgImage from "../assets/images/ubuntu-20-04-2.webp";
+import AppContainer from "../components/AppContainer";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundAttachment: "fixed",
     color: "#eee",
-    paddingTop: "3ch"
+    paddingTop: "3ch",
+    maxHeight: "100vh"
   },
   app: {
     padding: "1rem 2rem",
@@ -34,10 +38,23 @@ const useStyles = makeStyles({
     },
     "& > svg": {
       width: "2.5rem",
-      height: "2.5rem"
+      height: "2.5rem",
+      display: "block"
+    }
+  },
+  iframeContainer: {
+    position: "absolute",
+    left: theme.spacing(8),
+    top: "24px",
+    bottom: 0,
+    width: `calc(100% - ${theme.spacing(8)})`,
+    height: `calc(100% - 30px)`,
+    "& > iframe": {
+      width: "100%",
+      height: "100%"
     }
   }
-});
+}));
 
 const DesktopScreen = () => {
   const { state, actions } = useContext(AppContext);
@@ -47,6 +64,12 @@ const DesktopScreen = () => {
   const classes = useStyles();
 
   useEffect(() => actions.setBg(bgImage), []);
+
+  const VsCode = (
+    <Box className={classes.iframeContainer}>
+      <iframe src="https://github1s.com/ikabir21/portfolio"></iframe>
+    </Box>
+  );
 
   const handleClick = () => {
     showContextMenu && setContextMenu(false);
@@ -66,6 +89,10 @@ const DesktopScreen = () => {
     setCoordinate(_coordinate);
   };
 
+  const handleDoubleClick = (e, appName, isOpen) => {
+    actions.setAppOpen({ appName, isOpen });
+  };
+
   return (
     <Box
       onClick={handleClick}
@@ -75,17 +102,58 @@ const DesktopScreen = () => {
       className={classes.container}
     >
       <ToolBar color="#343434" />
-      <Grid container>
+      <SideBar />
+      <Grid
+        sx={{
+          marginLeft: "8ch",
+          height: "100%",
+          position: "relative",
+          overflow: "hidden",
+          width: "100%"
+        }}
+        container
+      >
         <Grid item>
-          <Grid onDoubleClick={() => alert("hi")} container direction="column">
+          <Grid container direction="column">
             <Grid item className={classes.app}>
               <HomeIcon />
+              <Typography variant="body2" align="center">
+                ikabir
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              className={classes.app}
+              name="vsCode"
+              onDoubleClick={(e) => handleDoubleClick(e, "vsCode", true)}
+            >
+              <SpotifyIcon />
+              <Typography variant="body2" align="center">
+                Spotify
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              className={classes.app}
+              name="vsCode"
+              onDoubleClick={(e) => handleDoubleClick(e, "vsCode", true)}
+            >
+              <VsCodeIcon />
+              <Typography variant="body2" align="center">
+                Code
+              </Typography>
             </Grid>
             <Grid item className={classes.app}>
-              <HomeIcon />
+              <TrashIcon />
+              <Typography variant="body2" align="center">
+                Trash
+              </Typography>
             </Grid>
           </Grid>
         </Grid>
+        <AppContainer />
+
+        {state?.apps?.vsCode?.isOpen && !state?.apps?.vsCode?.isMinimized && VsCode}
       </Grid>
       {showContextMenu && <ContextMenu coordinate={coordinate} />}
     </Box>
