@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(0.5),
     "&:hover": {
       background: "#26282c"
+    },
+    "& > svg": {
+      transform: "scale(1.8)"
     }
   }
 }));
@@ -34,32 +37,18 @@ const SideBar = () => {
   const { state, actions } = useContext(AppContext);
   const classes = useStyles();
 
-  const handleClick = (e, appName) => {
-    const _isMinimized = state?.apps?.[appName]?.isMinimized || false;
-    console.log(appName, state?.apps?.[appName]?.isMinimized);
-    actions.setAppOpen({
-      appName,
-      isOpen: true,
-      isMaximized: state?.apps?.appName?.isMaximized || false,
-      isMinimized: !_isMinimized
-    });
-  };
-
   return (
     <Box className={classes.root} display="flex" justifyContent="center">
       <List className={classes.list}>
-        <ListItem
-          disablePadding
-          sx={{ background: state?.apps?.vsCode?.isOpen && "#26282c" }}
-          className={classes.listItem}
-        >
-          {state?.apps?.vsCode?.isOpen && <DotIcon />}
-          <VsCodeIcon onClick={(e) => handleClick(e, "vsCode")} sx={{ transform: "scale(1.8)" }} />
-        </ListItem>
-        <ListItem disablePadding className={classes.listItem}>
-          {state?.apps?.spotify?.isOpen && <DotIcon />}
-          <SpotifyIcon sx={{ transform: "scale(1.8)" }} />
-        </ListItem>
+        {state.apps.map(
+          (app, i) =>
+            app.isFavourite && (
+              <ListItem key={i} disablePadding className={classes.listItem}>
+                <DotIcon />
+                {app.icon}
+              </ListItem>
+            )
+        )}
         <div style={{ flexGrow: 1 }} />
         <ListItem disablePadding className={classes.listItem}>
           <AppsIcon sx={{ transform: "scale(1.8)" }} />

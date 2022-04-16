@@ -1,11 +1,21 @@
 /* eslint-disable no-case-declarations */
-import { AUTH, SET_BG, SET_APP_OPEN } from "./constants";
+import { AUTH, SET_BG, SET_APP_OPEN, SET_APP_STATE } from "./constants";
 import bgImage from "../assets/images/ubuntu-20-04-2.webp";
+import apps from "../config/apps";
 
 export const initialState = {
   isAuth: localStorage.getItem("isAuth") ? localStorage.getItem("isAuth") : false,
   bgImage: localStorage.getItem("bgImage") ? localStorage.getItem("bgImage") : bgImage,
-  apps: {}
+  appStack: [],
+  appState: {
+    focusedWindows: {},
+    closedWindows: {},
+    favouriteApps: {},
+    hideSideBar: false,
+    minimizedWindows: {},
+    desktop_apps: []
+  },
+  apps: apps
 };
 
 const reducer = (state, action) => {
@@ -29,6 +39,11 @@ const reducer = (state, action) => {
           ...state.apps,
           [appName]: { isOpen, isMaximized, isMinimized }
         }
+      };
+    case SET_APP_STATE:
+      return {
+        ...state,
+        appState: action.payload
       };
   }
   return state;

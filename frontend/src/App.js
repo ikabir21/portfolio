@@ -14,8 +14,6 @@ import { AppContext } from "./context";
 const App = () => {
   const { state, actions } = useContext(AppContext);
 
-  console.log(state);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

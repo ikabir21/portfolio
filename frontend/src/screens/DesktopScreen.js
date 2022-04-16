@@ -17,8 +17,8 @@ import { AppContext } from "../context";
 import ContextMenu from "../components/ContextMenu";
 import SideBar from "../components/ToolBar/SideBar";
 import ToolBar from "../components/ToolBar";
-import bgImage from "../assets/images/ubuntu-20-04-2.webp";
 import AppContainer from "../components/AppContainer";
+import apps from "../config/apps";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -58,18 +58,18 @@ const useStyles = makeStyles((theme) => ({
 
 const DesktopScreen = () => {
   const { state, actions } = useContext(AppContext);
+  const [favApps, setFavApps] = useState({});
+
+  const [obj, setObj] = useState({
+    minimizedWindows: {},
+    focusedWindows: {}
+  });
+
+  console.log(apps);
 
   const [showContextMenu, setContextMenu] = useState(false);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const classes = useStyles();
-
-  useEffect(() => actions.setBg(bgImage), []);
-
-  const VsCode = (
-    <Box className={classes.iframeContainer}>
-      <iframe src="https://github1s.com/ikabir21/portfolio"></iframe>
-    </Box>
-  );
 
   const handleClick = () => {
     showContextMenu && setContextMenu(false);
@@ -91,6 +91,132 @@ const DesktopScreen = () => {
 
   const handleDoubleClick = (e, appName, isOpen) => {
     actions.setAppOpen({ appName, isOpen });
+  };
+
+  const hasMinimized = (objId) => {
+    const { minimizedWindows, focusedWindows } = obj;
+    minimizedWindows[objId] = true;
+    focusedWindows[objId] = false;
+    actions.setAppState({ minimizedWindows, focusedWindows });
+    // focus();
+  };
+
+  // const focus = () => {
+  //   if (isAllMinimized()) {
+  //     for (const index in )
+  //   }
+  // };
+
+  const isAllMinimized = () => {};
+
+  useEffect(() => {
+    loadApps();
+    checkNewFolders();
+  }, []);
+
+  const loadApps = () => {
+    let focusedWindows = {},
+      closedWindows = {},
+      favouriteApps = {},
+      minimizedWindows = {};
+    const desktopApps = [];
+    apps.forEach((app) => {
+      focusedWindows = {
+        ...focusedWindows,
+        [app.id]: false
+      };
+      closedWindows = {
+        ...closedWindows,
+        [app.id]: true
+      };
+      favouriteApps = {
+        ...favouriteApps,
+        [app.id]: app.favourite
+      };
+      minimizedWindows = {
+        ...minimizedWindows,
+        [app.id]: false
+      };
+      if (app.desktopShortcut) desktopApps.push(app.id);
+    });
+    actions.setAppState({
+      focusedWindows,
+      closedWindows,
+      favouriteApps,
+      minimizedWindows,
+      desktopApps
+    });
+    setFavApps({ ...favouriteApps });
+  };
+
+  const checkNewFolders = () => {
+    let newFolders = localStorage.getItem("newFolders");
+    if (newFolders === null && newFolders !== undefined) {
+      localStorage.setItem("newFolders", JSON.stringify([]));
+    } else {
+      newFolders = JSON.parse(newFolders);
+      newFolders.forEach((folder) => {
+        apps.push({
+          id: `new-folder-${folder.id}`,
+          title: folder.name,
+          icon: "./themes/Yaru/system/folder.png",
+          favourite: false,
+          desktopShortcut: true,
+          screen: () => {}
+        });
+      });
+      updateAppsData();
+    }
+  };
+
+  const updateAppsData = () => {
+    let focusedWindows = {},
+      closedWindows = {},
+      favouriteApps = {},
+      minimizedWindows = {},
+      disabledApps = {};
+    let desktopApps = [];
+    apps.forEach((app) => {
+      focusedWindows = {
+        ...focusedWindows,
+        [app.id]:
+          focusedWindows[app.id] !== undefined || focusedWindows[app.id] !== null
+            ? focusedWindows[app.id]
+            : false
+      };
+      minimizedWindows = {
+        ...minimizedWindows,
+        [app.id]:
+          minimizedWindows[app.id] !== undefined || minimizedWindows[app.id] !== null
+            ? minimizedWindows[app.id]
+            : false
+      };
+      disabledApps = {
+        ...disabledApps,
+        [app.id]: app.disabled
+      };
+      closedWindows = {
+        ...closedWindows,
+        [app.id]:
+          closedWindows[app.id] !== undefined || closedWindows[app.id] !== null
+            ? closedWindows[app.id]
+            : true
+      };
+      favouriteApps = {
+        ...favouriteApps,
+        [app.id]: app.favourite
+      };
+      if (app.desktop_shortcut) desktopApps.push(app.id);
+    });
+    actions.setAppState({
+      focusedWindows,
+      closedWindows,
+      disabledApps,
+      minimizedWindows,
+      favouriteApps,
+      desktopApps
+    });
+    setFavApps({ ...favouriteApps });
   };
 
   return (
@@ -115,45 +241,35 @@ const DesktopScreen = () => {
       >
         <Grid item>
           <Grid container direction="column">
-            <Grid item className={classes.app}>
-              <HomeIcon />
-              <Typography variant="body2" align="center">
-                ikabir
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              className={classes.app}
-              name="vsCode"
-              onDoubleClick={(e) => handleDoubleClick(e, "vsCode", true)}
-            >
-              <SpotifyIcon />
-              <Typography variant="body2" align="center">
-                Spotify
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              className={classes.app}
-              name="vsCode"
-              onDoubleClick={(e) => handleDoubleClick(e, "vsCode", true)}
-            >
-              <VsCodeIcon />
-              <Typography variant="body2" align="center">
-                Code
-              </Typography>
-            </Grid>
-            <Grid item className={classes.app}>
-              <TrashIcon />
-              <Typography variant="body2" align="center">
-                Trash
-              </Typography>
-            </Grid>
+            {state.apps.map(
+              (app, i) =>
+                app.isDesktopShortcut && (
+                  <Grid key={i} item className={classes.app}>
+                    {app.icon}
+                    <Typography variant="body2" align="center">
+                      {app.title}
+                    </Typography>
+                  </Grid>
+                )
+            )}
           </Grid>
         </Grid>
-        <AppContainer />
-
-        {state?.apps?.vsCode?.isOpen && !state?.apps?.vsCode?.isMinimized && VsCode}
+        {/* <AppContainer /> */}
+        {/* <div
+          style={{ position: "absolute", height: "100%", width: "100%" }}
+          data-context="desktop-area"
+        >
+          {apps.map((app, i) => (
+            <AppContainer
+              key={i}
+              id={app.id}
+              tittle={app.title}
+              screen={app.screen}
+              hasMinimized={hasMinimized}
+              minimized={obj.minimizedWindows[app.id]}
+            />
+          ))}
+        </div> */}
       </Grid>
       {showContextMenu && <ContextMenu coordinate={coordinate} />}
     </Box>
