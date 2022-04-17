@@ -1,12 +1,12 @@
 /* eslint-disable no-case-declarations */
-import { AUTH, SET_BG, SET_APP_OPEN, SET_APP_STATE } from "./constants";
+import { AUTH, SET_BG, SET_APP_OPEN, SET_APP_STATE, SET_ALREADY_OPENED_APPS } from "./constants";
 import bgImage from "../assets/images/ubuntu-20-04-2.webp";
 import apps from "../config/apps";
 
 export const initialState = {
   isAuth: localStorage.getItem("isAuth") ? localStorage.getItem("isAuth") : false,
   bgImage: localStorage.getItem("bgImage") ? localStorage.getItem("bgImage") : bgImage,
-  appStack: [],
+  alreadyOpenedApps: [],
   appState: {
     focusedWindows: {},
     closedWindows: {},
@@ -43,7 +43,14 @@ const reducer = (state, action) => {
     case SET_APP_STATE:
       return {
         ...state,
-        appState: action.payload
+        appState: { ...state.appState, ...action.payload }
+      };
+    case SET_ALREADY_OPENED_APPS:
+      const apps = state.alreadyOpenedApps;
+      apps.push(action.payload);
+      return {
+        ...state,
+        alreadyOpenedApps: apps
       };
   }
   return state;

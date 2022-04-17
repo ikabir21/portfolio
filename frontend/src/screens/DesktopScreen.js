@@ -65,8 +65,6 @@ const DesktopScreen = () => {
     focusedWindows: {}
   });
 
-  console.log(apps);
-
   const [showContextMenu, setContextMenu] = useState(false);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const classes = useStyles();
@@ -93,10 +91,10 @@ const DesktopScreen = () => {
     actions.setAppOpen({ appName, isOpen });
   };
 
-  const hasMinimized = (objId) => {
+  const hasMinimized = (appId) => {
     const { minimizedWindows, focusedWindows } = obj;
-    minimizedWindows[objId] = true;
-    focusedWindows[objId] = false;
+    minimizedWindows[appId] = true;
+    focusedWindows[appId] = false;
     actions.setAppState({ minimizedWindows, focusedWindows });
     // focus();
   };
@@ -206,7 +204,7 @@ const DesktopScreen = () => {
         ...favouriteApps,
         [app.id]: app.favourite
       };
-      if (app.desktop_shortcut) desktopApps.push(app.id);
+      if (app.desktopShortcut) desktopApps.push(app.id);
     });
     actions.setAppState({
       focusedWindows,
@@ -219,6 +217,69 @@ const DesktopScreen = () => {
     setFavApps({ ...favouriteApps });
   };
 
+  const openApp = (appId) => {
+    console.log(state);
+    if (state.appState.minimizedWindows?.[appId]) {
+      focusApp(appId);
+
+      const minimizedWindows = state.appState.minimizedWindows;
+      minimizedWindows[appId] = false;
+      actions.setAppState({ minimizedWindows });
+    }
+
+    // Already opened
+    if (state.alreadyOpenedApps.includes(appId)) focusApp(appId);
+    else {
+      const { closedWindows, favouriteApps } = state.appState;
+      const frequentApps = localStorage.getItem("frequentApps")
+        ? JSON.parse(localStorage.getItem("frequentApps"))
+        : [];
+      const currentApp = frequentApps.find((app) => app.id === appId);
+      if (currentApp) {
+        frequentApps.forEach((app) => {
+          if (app.id === currentApp.id) {
+            app.frequency += 1;
+          }
+        });
+      } else {
+        frequentApps.push({ id: appId, frequency: 1 });
+      }
+
+      frequentApps.sort((a, b) => {
+        if (a.frequency < b.frequency) {
+          return 1;
+        }
+        if (a.frequency > b.frequency) {
+          return -1;
+        }
+        return 0;
+      });
+
+      localStorage.setItem("frequentApps", JSON.stringify(frequentApps));
+
+      setTimeout(() => {
+        favouriteApps[appId] = true;
+        closedWindows[appId] = false;
+        actions.setAppState({ closedWindows, favouriteApps, allAppsView: false }, focusApp(appId));
+        actions.setAlreadyOpenedApps(appId);
+      }, 200);
+    }
+  };
+
+  const focusApp = (appId) => {
+    var focusedWindows = state.appState.focusedWindows;
+    focusedWindows[appId] = true;
+    for (let key in focusedWindows) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (focusedWindows.hasOwnProperty(key)) {
+        if (key !== appId) {
+          focusedWindows[key] = false;
+        }
+      }
+    }
+    actions.setAppState({ focusedWindows });
+  };
+
   return (
     <Box
       onClick={handleClick}
@@ -228,7 +289,7 @@ const DesktopScreen = () => {
       className={classes.container}
     >
       <ToolBar color="#343434" />
-      <SideBar />
+      <SideBar openApp={openApp} />
       <Grid
         sx={{
           marginLeft: "8ch",
@@ -244,7 +305,7 @@ const DesktopScreen = () => {
             {state.apps.map(
               (app, i) =>
                 app.isDesktopShortcut && (
-                  <Grid key={i} item className={classes.app}>
+                  <Grid key={i} onDoubleClick={() => openApp(app.id)} item className={classes.app}>
                     {app.icon}
                     <Typography variant="body2" align="center">
                       {app.title}

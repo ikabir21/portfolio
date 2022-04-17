@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import makeStyles from "@mui/styles/makeStyles";
 
-import { AppsIcon, VsCodeIcon, SpotifyIcon } from "../../assets/svg/apps";
+import { AppsIcon } from "../../assets/svg/apps";
 import DotIcon from "../../assets/svg/DotIcon";
 import { AppContext } from "../../context";
 
@@ -33,9 +34,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const SideBar = () => {
+const SideBar = (props) => {
   const { state, actions } = useContext(AppContext);
   const classes = useStyles();
+
+  // console.log(state.appState.closedWindows);
 
   return (
     <Box className={classes.root} display="flex" justifyContent="center">
@@ -43,8 +46,14 @@ const SideBar = () => {
         {state.apps.map(
           (app, i) =>
             app.isFavourite && (
-              <ListItem key={i} disablePadding className={classes.listItem}>
-                <DotIcon />
+              <ListItem
+                onClick={() => props.openApp(app.id)}
+                key={i}
+                disablePadding
+                className={classes.listItem}
+              >
+                {state.appState.closedWindows?.[app.id] !== undefined &&
+                  !state.appState.closedWindows?.[app.id] && <DotIcon />}
                 {app.icon}
               </ListItem>
             )
