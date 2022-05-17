@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import makeStyles from "@mui/styles/makeStyles";
@@ -66,6 +66,11 @@ const AppContainer = (props) => {
     }
   });
 
+  useEffect(() => {
+    setDefaultWindowDimenstion();
+    window.addEventListener("resize", resizeBoundries);
+  }, []);
+
   const restoreWindow = () => {
     var r = document.querySelector("#" + props.id);
     setDefaultWindowDimenstion();
@@ -82,9 +87,11 @@ const AppContainer = (props) => {
 
   const setDefaultWindowDimenstion = () => {
     if (window.innerWidth < 640) {
-      setObj({ height: 60, width: 85 }, resizeBoundries);
+      setObj({ height: 60, width: 85 });
+      resizeBoundries();
     } else {
-      setObj({ height: 85, width: 60 }, resizeBoundries);
+      setObj({ height: 85, width: 60 });
+      resizeBoundries();
     }
   };
 
@@ -102,13 +109,8 @@ const AppContainer = (props) => {
   const resizeBoundries = () => {
     setObj({
       parentSize: {
-        height:
-          window.innerHeight - //parent height
-          window.innerHeight * (obj.height / 100.0) - // this window's height
-          28, // some padding
-        width:
-          window.innerWidth - // parent width
-          window.innerWidth * (obj.width / 100.0) //this window's width
+        height: window.innerHeight - window.innerHeight * (obj.height / 100.0),
+        width: window.innerWidth - window.innerWidth * (obj.width / 100.0) - 65
       }
     });
   };
@@ -160,10 +162,9 @@ const AppContainer = (props) => {
   return (
     <Draggable
       axis="both"
-      // handle=".handle"
       grid={[1, 1]}
       scale={1}
-      // onDrag={handleDrag}
+      // onDrag={checkOverlap}
       onStart={handleStart}
       onStop={handleStop}
       allowAnyClick={false}
@@ -178,12 +179,15 @@ const AppContainer = (props) => {
       // onMouseUp={eventControl}
       // onTouchStart={eventControl}
       // onTouchEnd={eventControl}
+      // style={{ position: "absolute", zIndex: 30 }}
     >
       <div
         style={{
           width: `${obj.width}%`,
           height: `${obj.height}%`,
-          backgroundColor: "#333"
+          backgroundColor: "#333",
+          position: "absolute",
+          zIndex: 30
         }}
         id={props.id}
       >

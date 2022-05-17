@@ -32,12 +32,24 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "start"
   },
   app: {
-    display: "inline-block",
-    padding: "1rem 2rem",
-    borderRadius: "4px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    outline: "2px solid transparent",
+    outlineOffset: "2px",
+    textAlign: "center",
+    padding: ".25rem",
+    borderColor: "transparent",
+    borderWidth: "1px",
+    borderRadius: "0.25rem",
     zIndex: 10,
+    width: "6rem",
+    height: "5rem",
+    margin: "1px",
+    backgroundColor: "rgba(255,255,255,0)",
     "&:hover": {
-      backgroundColor: "#616773"
+      backgroundColor: "rgba(255,255,255,0.2)"
     },
     "& > svg": {
       width: "2.5rem",
