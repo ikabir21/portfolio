@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 
 // @mui/material imports
 
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
@@ -12,7 +11,6 @@ import makeStyles from "@mui/styles/makeStyles";
 
 // project imports
 
-import { HomeIcon, TrashIcon, VsCodeIcon, SpotifyIcon } from "../assets/svg/apps";
 import { AppContext } from "../context";
 import ContextMenu from "../components/ContextMenu";
 import SideBar from "../components/ToolBar/SideBar";
@@ -28,11 +26,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundAttachment: "fixed",
     color: "#eee",
     paddingTop: "3ch",
-    maxHeight: "100vh"
+    maxHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "start"
   },
   app: {
+    display: "inline-block",
     padding: "1rem 2rem",
     borderRadius: "4px",
+    zIndex: 10,
     "&:hover": {
       backgroundColor: "#616773"
     },
@@ -58,12 +61,6 @@ const useStyles = makeStyles((theme) => ({
 
 const DesktopScreen = () => {
   const { state, actions } = useContext(AppContext);
-  const [favApps, setFavApps] = useState({});
-
-  const [obj, setObj] = useState({
-    minimizedWindows: {},
-    focusedWindows: {}
-  });
 
   const [showContextMenu, setContextMenu] = useState(false);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
@@ -87,25 +84,13 @@ const DesktopScreen = () => {
     setCoordinate(_coordinate);
   };
 
-  const handleDoubleClick = (e, appName, isOpen) => {
-    actions.setAppOpen({ appName, isOpen });
-  };
-
   const hasMinimized = (appId) => {
-    const { minimizedWindows, focusedWindows } = obj;
+    const { minimizedWindows, focusedWindows } = state.appState;
     minimizedWindows[appId] = true;
     focusedWindows[appId] = false;
     actions.setAppState({ minimizedWindows, focusedWindows });
-    // focus();
+    console.log(state);
   };
-
-  // const focus = () => {
-  //   if (isAllMinimized()) {
-  //     for (const index in )
-  //   }
-  // };
-
-  const isAllMinimized = () => {};
 
   useEffect(() => {
     loadApps();
@@ -144,7 +129,6 @@ const DesktopScreen = () => {
       minimizedWindows,
       desktopApps
     });
-    setFavApps({ ...favouriteApps });
   };
 
   const checkNewFolders = () => {
@@ -214,7 +198,6 @@ const DesktopScreen = () => {
       favouriteApps,
       desktopApps
     });
-    setFavApps({ ...favouriteApps });
   };
 
   const openApp = (appId) => {
@@ -280,58 +263,99 @@ const DesktopScreen = () => {
     actions.setAppState({ focusedWindows });
   };
 
+  console.log(
+    state.appState.minimizedWindows["vscode"] !== undefined,
+    !state.appState.minimizedWindows?.["vscode"]
+  );
+
   return (
     <Box
       onClick={handleClick}
       onContextMenu={handleContextMenu}
       height="100vh"
-      style={{ backgroundImage: `url(${state?.bgImage})` }}
+      sx={{
+        // backgroundImage: `url(${state?.bgImage})`,
+        position: "relative",
+        minHeight: "100%",
+        minWidth: "100%"
+      }}
       className={classes.container}
     >
       <ToolBar color="#343434" />
-      <SideBar openApp={openApp} />
-      <Grid
+      <Box
         sx={{
-          marginLeft: "8ch",
+          width: "100%",
           height: "100%",
+          backgroundColor: "transparent",
           position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "flex-end",
+          // alignContent: "flex-end",
+          flexWrap: "wrap-reverse",
           overflow: "hidden",
-          width: "100%"
+          paddingLeft: "8ch"
         }}
-        container
       >
-        <Grid item>
-          <Grid container direction="column">
-            {state.apps.map(
-              (app, i) =>
-                app.isDesktopShortcut && (
-                  <Grid key={i} onDoubleClick={() => openApp(app.id)} item className={classes.app}>
-                    {app.icon}
-                    <Typography variant="body2" align="center">
-                      {app.title}
-                    </Typography>
-                  </Grid>
-                )
-            )}
-          </Grid>
-        </Grid>
-        {/* <AppContainer /> */}
-        {/* <div
-          style={{ position: "absolute", height: "100%", width: "100%" }}
+        {/* Desktop Area */}
+
+        <div
+          style={{ height: "100%", width: "100%", position: "absolute" }}
           data-context="desktop-area"
         >
-          {apps.map((app, i) => (
-            <AppContainer
-              key={i}
-              id={app.id}
-              tittle={app.title}
-              screen={app.screen}
-              hasMinimized={hasMinimized}
-              minimized={obj.minimizedWindows[app.id]}
-            />
-          ))}
-        </div> */}
-      </Grid>
+          {apps.map(
+            (app, i) =>
+              state.appState.closedWindows[app.id] !== undefined &&
+              !state.appState.closedWindows?.[app.id] && (
+                <AppContainer
+                  key={i}
+                  id={app.id}
+                  tittle={app.title}
+                  screen={app.screen}
+                  hasMinimized={hasMinimized}
+                  minimized={state.appState.minimizedWindows[app.id]}
+                />
+              )
+          )}
+        </div>
+
+        {/* Background Image Here */}
+
+        <Box
+          sx={{
+            backgroundImage: `url(${state?.bgImage})`,
+            position: "absolute",
+            height: "100%",
+            width: "100%",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPositionX: "center",
+            zIndex: -10,
+            top: 0,
+            right: 0
+          }}
+        />
+
+        <SideBar
+          sx={{
+            transform: "translateX(-8ch)"
+          }}
+          openApp={openApp}
+        />
+        <Box sx={{ width: ".25rem", height: "100%", position: "absolute", left: 0, top: 0 }} />
+        {state.apps.map(
+          (app, i) =>
+            app.isDesktopShortcut && (
+              <Box key={i} onDoubleClick={() => openApp(app.id)} className={classes.app}>
+                {app.icon}
+                <Typography variant="body2" align="center">
+                  {app.title}
+                </Typography>
+              </Box>
+            )
+        )}
+      </Box>
       {showContextMenu && <ContextMenu coordinate={coordinate} />}
     </Box>
   );

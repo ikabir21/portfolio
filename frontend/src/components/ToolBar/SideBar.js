@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     width: theme.spacing(8),
     height: "100%",
-    background: "#151515"
+    background: "#151515",
+    zIndex: 40
   },
   list: {
     display: "flex",
@@ -41,28 +42,41 @@ const SideBar = (props) => {
   // console.log(state.appState.closedWindows);
 
   return (
-    <Box className={classes.root} display="flex" justifyContent="center">
-      <List className={classes.list}>
-        {state.apps.map(
-          (app, i) =>
-            app.isFavourite && (
-              <ListItem
-                onClick={() => props.openApp(app.id)}
-                key={i}
-                disablePadding
-                className={classes.listItem}
-              >
-                {state.appState.closedWindows?.[app.id] !== undefined &&
-                  !state.appState.closedWindows?.[app.id] && <DotIcon />}
-                {app.icon}
-              </ListItem>
-            )
-        )}
-        <div style={{ flexGrow: 1 }} />
-        <ListItem disablePadding className={classes.listItem}>
-          <AppsIcon sx={{ transform: "scale(1.8)" }} />
-        </ListItem>
-      </List>
+    <Box
+      sx={{
+        position: "absolute",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        height: "100%",
+        width: "auto",
+        zIndex: 40,
+        left: 0,
+        top: 0,
+        backgroundColor: "#151515",
+        padding: ".3ch"
+      }}
+    >
+      {state.apps.map(
+        (app, i) =>
+          app.isFavourite && (
+            <ListItem
+              onClick={() => props.openApp(app.id)}
+              key={i}
+              disablePadding
+              className={classes.listItem}
+            >
+              {state.appState.closedWindows?.[app.id] !== undefined &&
+                !state.appState.closedWindows?.[app.id] && <DotIcon />}
+              {app.icon}
+            </ListItem>
+          )
+      )}
+      <div style={{ flexGrow: 1 }} />
+      <ListItem disablePadding className={classes.listItem}>
+        <AppsIcon sx={{ transform: "scale(1.8)" }} />
+      </ListItem>
     </Box>
   );
 };

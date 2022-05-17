@@ -1,17 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useState } from "react";
 import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import makeStyles from "@mui/styles/makeStyles";
-
-import { Rnd } from "react-rnd";
 import Draggable from "react-draggable";
 import { AppContext } from "../context";
-import NextIcon from "../assets/svg/NextIcon";
-import BackIcon from "../assets/svg/BackIcon";
 import MinimizeIcon from "../assets/svg/MinimizeIcon";
 import MaximizeIcon1 from "../assets/svg/MaximizeIcon1";
 import MaximizeIcon2 from "../assets/svg/MaximizeIcon2";
@@ -29,18 +22,12 @@ const WindowEditButtons = (props) => {
       <div />
       <Typography>{props.title || "APP TITLE HERE"}</Typography>
       <div>
-        <span onClick={props.minimize}>
+        <span onClick={props.minimizeWindow}>
           <MinimizeIcon />
         </span>
-        {props.isMaximised ? (
-          <span onClick={props.maximize}>
-            <MaximizeIcon1 />
-          </span>
-        ) : (
-          <span onClick={props.maximize}>
-            <MaximizeIcon2 />
-          </span>
-        )}
+        <span onClick={props.maximizeWindow}>
+          {props.isMaximised ? <MaximizeIcon1 /> : <MaximizeIcon2 />}
+        </span>
         <button tabIndex="-1" id={`close-${props.id}`} onClick={props.close}>
           <CloseIcon />
         </button>
@@ -65,16 +52,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AppContainer = (props) => {
-  const { state, actions } = useContext(AppContext);
-  const classes = useStyles();
-
-  console.log(props);
-
-  const [appState, setAppState] = useState({
-    startX: 60,
-    startY: 10,
+  const [obj, setObj] = useState({
+    x: 60,
+    y: 10,
     isDrag: false,
-    cursorTypeMove: false,
     width: 60,
     height: 85,
     closed: false,
@@ -94,16 +75,16 @@ const AppContainer = (props) => {
 
     r.style.transform = `translate(${posx},${posy})`;
     setTimeout(() => {
-      setAppState({ maximized: false });
-      checkOverlap();
+      setObj({ maximized: false });
+      // checkOverlap();
     }, 300);
   };
 
   const setDefaultWindowDimenstion = () => {
     if (window.innerWidth < 640) {
-      setAppState({ height: 60, width: 85 }, resizeBoundries);
+      setObj({ height: 60, width: 85 }, resizeBoundries);
     } else {
-      setAppState({ height: 85, width: 60 }, resizeBoundries);
+      setObj({ height: 85, width: 60 }, resizeBoundries);
     }
   };
 
@@ -119,57 +100,44 @@ const AppContainer = (props) => {
   };
 
   const resizeBoundries = () => {
-    setAppState({
+    setObj({
       parentSize: {
         height:
           window.innerHeight - //parent height
-          window.innerHeight * (appState.height / 100.0) - // this window's height
+          window.innerHeight * (obj.height / 100.0) - // this window's height
           28, // some padding
         width:
           window.innerWidth - // parent width
-          window.innerWidth * (appState.width / 100.0) //this window's width
+          window.innerWidth * (obj.width / 100.0) //this window's width
       }
     });
   };
 
   const maximizeWindow = () => {
-    if (appState.maximized) {
+    if (obj.maximized) {
       restoreWindow();
     } else {
-      focusWindow();
+      props.focusWindow(props.id);
       var r = document.querySelector("#" + props.id);
       setWinowsPosition();
       // translate window to maximize position
       r.style.transform = `translate(-1pt,-2pt)`;
-      setAppState({ maximized: true, height: 96.3, width: 100.2 });
-      props.hideSideBar(props.id, true);
+      setObj({ maximized: true, height: 96.3, width: 100.2 });
     }
   };
 
   const minimizeWindow = () => {
     alert("hi");
-    // let posx = -310;
-    // if (appState.maximized) {
-    //   posx = -510;
-    // }
     setWinowsPosition();
-    // get corrosponding sidebar app's position
-    // var r = document.querySelector("#sidebar-" + props.id);
-    // var sidebBarApp = r.getBoundingClientRect();
-
-    // const r = document.querySelector("#" + props.id);
-    // translate window to that position
-    // r.style.transform = `translate(${posx}px,${sidebBarApp.y.toFixed(1) - 240}px) scale(0.2)`;
     props.hasMinimized(props.id);
   };
 
   const closeWindow = () => {
     setWinowsPosition();
-    setAppState({ closed: true }, () => {
-      props.hideSideBar(props.id, false);
+    setObj({ closed: true }, () => {
       setTimeout(() => {
-        props.closed(props.id);
-      }, 300); // after 300ms this window will be unmounted from parent (Desktop)
+        props.closedWindow(props.id);
+      }, 300);
     });
   };
 
@@ -180,18 +148,14 @@ const AppContainer = (props) => {
     r.style.setProperty("--window-transform-y", (rect.y.toFixed(1) - 32).toString() + "px");
   };
 
-  const focusWindow = () => {
-    props.focus(props.id);
-  };
+  // const handleDrag = (e, d) => {
+  //   const { x, y } = appState;
+  //   setAppState((state) => ({ ...state, x: x + d.x, y: y + d.y }));
+  // };
 
-  const handleDrag = (e, d) => {
-    const { startX, startY } = appState;
-    setAppState((state) => ({ ...state, startX: startX + d.x, startY: startY + d.y }));
-  };
+  const handleStart = () => setObj((state) => ({ ...state, isDrag: true }));
 
-  const handleStart = () => setAppState((state) => ({ ...state, isDrag: true }));
-
-  const handleEnd = () => setAppState((state) => ({ ...state, isDrag: false }));
+  const handleStop = () => setObj((state) => ({ ...state, isDrag: false }));
 
   return (
     <Draggable
@@ -199,44 +163,39 @@ const AppContainer = (props) => {
       // handle=".handle"
       grid={[1, 1]}
       scale={1}
-      // // onStart={changeCursorToMove}
-      // // onStop={changeCursorToDefault}
-      // // onDrag={checkOverlap}
-      onDrag={handleDrag}
+      // onDrag={handleDrag}
       onStart={handleStart}
-      onStop={handleEnd}
+      onStop={handleStop}
+      allowAnyClick={false}
+      defaultPosition={{ x: obj.x, y: obj.y }}
+      bounds={{
+        left: 0,
+        top: 0,
+        right: obj.parentSize.width,
+        bottom: obj.parentSize.height
+      }}
       // onMouseDown={eventControl}
       // onMouseUp={eventControl}
       // onTouchStart={eventControl}
       // onTouchEnd={eventControl}
-      // allowAnyClick={false}
-      // defaultPosition={{ x: appState.startX, y: appState.startY }}
-      // bounds={{
-      //   left: 0,
-      //   top: 0,
-      //   right: appState.parentSize.width,
-      //   bottom: appState.parentSize.height
-      // }}
     >
       <div
         style={{
-          width: `${appState.width}%`,
-          height: `${appState.height}%`,
+          width: `${obj.width}%`,
+          height: `${obj.height}%`,
           backgroundColor: "#333"
         }}
-        draggable={false}
-        className={appState.closed && "closed-window"}
         id={props.id}
       >
         {/* <WindowYBorder resize={handleHorizontalResize} />
         <WindowXBorder resize={handleVerticleResize} />*/}
         <WindowEditButtons
-          minimize={minimizeWindow}
-          maximize={maximizeWindow}
-          isMaximised={appState.maximized}
-          close={closeWindow}
+          minimizeWindow={minimizeWindow}
+          maximizeWindow={maximizeWindow}
+          isMaximised={obj.maximized}
+          closeWindow={closeWindow}
           id={props.id}
-          isDrag={appState.isDrag}
+          isDrag={obj.isDrag}
         />
         {/* {props.id === "settings" ? (
           <Settings

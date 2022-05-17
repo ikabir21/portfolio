@@ -13,7 +13,7 @@ export const initialState = {
     favouriteApps: {},
     hideSideBar: false,
     minimizedWindows: {},
-    desktop_apps: []
+    desktopApps: []
   },
   apps: apps
 };
