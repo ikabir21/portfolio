@@ -275,6 +275,32 @@ const DesktopScreen = () => {
     actions.setAppState({ focusedWindows });
   };
 
+  const hideSideBar = (objId, hide) => {
+    if (hide === state.appState.hideSideBar) return;
+
+    if (!objId) {
+      if (!hide) {
+        actions.setAppState({ hideSideBar: false });
+      } else {
+        for (const key in state.appState.overlappedWindows) {
+          if (state.appState.overlappedWindows[key]) {
+            actions.setAppState({ hideSideBar: true });
+          }
+        }
+      }
+    } else {
+      if (!hide) {
+        for (const key in state.appState.overlappedWindows) {
+          if (state.appState.overlappedWindows[key] && key !== objId) return;
+        }
+      }
+    }
+
+    let overlappedWindows = state.appState.overlappedWindows;
+    overlappedWindows[objId] = hide;
+    actions.setAppState({ hideSideBar: hide, overlappedWindows });
+  };
+
   console.log(
     state.appState.minimizedWindows["vscode"] !== undefined,
     !state.appState.minimizedWindows?.["vscode"]
@@ -326,6 +352,7 @@ const DesktopScreen = () => {
                   tittle={app.title}
                   screen={app.screen}
                   hasMinimized={hasMinimized}
+                  hideSideBar={hideSideBar}
                   minimized={state.appState.minimizedWindows[app.id]}
                 />
               )
@@ -350,9 +377,8 @@ const DesktopScreen = () => {
         />
 
         <SideBar
-          sx={{
-            transform: "translateX(-8ch)"
-          }}
+          hideSideBar={hideSideBar}
+          isSideBarHidden={state.appState.hideSideBar}
           openApp={openApp}
         />
         <Box sx={{ width: ".25rem", height: "100%", position: "absolute", left: 0, top: 0 }} />

@@ -13,6 +13,7 @@ export const initialState = {
     favouriteApps: {},
     hideSideBar: false,
     minimizedWindows: {},
+    overlappedWindows: {},
     desktopApps: []
   },
   apps: apps

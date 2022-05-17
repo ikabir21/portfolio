@@ -98,7 +98,8 @@ const AppContainer = (props) => {
   const checkOverlap = () => {
     var r = document.querySelector("#" + props.id);
     var rect = r.getBoundingClientRect();
-    if (rect.x.toFixed(1) < 50) {
+    if (rect.x.toFixed(1) < 100) {
+      console.log(props.id);
       // if this window overlapps with SideBar
       props.hideSideBar(props.id, true);
     } else {
@@ -164,13 +165,13 @@ const AppContainer = (props) => {
       axis="both"
       grid={[1, 1]}
       scale={1}
-      // onDrag={checkOverlap}
+      onDrag={checkOverlap}
       onStart={handleStart}
       onStop={handleStop}
       allowAnyClick={false}
       defaultPosition={{ x: obj.x, y: obj.y }}
       bounds={{
-        left: 0,
+        left: -64,
         top: 0,
         right: obj.parentSize.width,
         bottom: obj.parentSize.height

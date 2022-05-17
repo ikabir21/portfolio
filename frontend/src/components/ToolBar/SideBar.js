@@ -36,8 +36,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SideBar = (props) => {
+  console.log(props);
   const { state, actions } = useContext(AppContext);
   const classes = useStyles();
+
+  const showSideBar = () => props.hideSideBar(null, false);
+  const hideSideBar = () =>
+    setTimeout(() => {
+      props.hideSideBar(null, true);
+    }, 2000);
 
   // console.log(state.appState.closedWindows);
 
@@ -55,7 +62,9 @@ const SideBar = (props) => {
         left: 0,
         top: 0,
         backgroundColor: "#151515",
-        padding: ".3ch"
+        padding: ".3ch",
+        transform: props.isSideBarHidden && "translateX(-100%)",
+        transitionDuration: ".3s"
       }}
     >
       {state.apps.map(
