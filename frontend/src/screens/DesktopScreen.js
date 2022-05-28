@@ -96,12 +96,13 @@ const DesktopScreen = () => {
     setCoordinate(_coordinate);
   };
 
-  const hasMinimized = (appId) => {
+  const minimizeWindow = (appId) => {
     const { minimizedWindows, focusedWindows } = state.appState;
     minimizedWindows[appId] = true;
     focusedWindows[appId] = false;
     actions.setAppState({ minimizedWindows, focusedWindows });
-    console.log(state);
+    // console.log(state);
+    focusLastApp();
   };
 
   useEffect(() => {
@@ -213,9 +214,14 @@ const DesktopScreen = () => {
   };
 
   const openApp = (appId) => {
-    console.log(state);
+    console.log(state, "hi");
     if (state.appState.minimizedWindows?.[appId]) {
       focusApp(appId);
+
+      var r = document.querySelector("#" + appId);
+      r.style.transform = `translate(${r.style.getPropertyValue(
+        "--window-transform-x"
+      )},${r.style.getPropertyValue("--window-transform-y")}) scale(1)`;
 
       const minimizedWindows = state.appState.minimizedWindows;
       minimizedWindows[appId] = false;
@@ -255,7 +261,8 @@ const DesktopScreen = () => {
       setTimeout(() => {
         favouriteApps[appId] = true;
         closedWindows[appId] = false;
-        actions.setAppState({ closedWindows, favouriteApps, allAppsView: false }, focusApp(appId));
+        actions.setAppState({ closedWindows, favouriteApps, allAppsView: false });
+        focusApp(appId);
         actions.setAlreadyOpenedApps(appId);
       }, 200);
     }
@@ -268,8 +275,7 @@ const DesktopScreen = () => {
     hideSideBar(null, false);
 
     // close window
-    const closedWindows = state.appState.closedWindows;
-    const favouriteApps = state.appState.favouriteApps;
+    const { closedWindows, favouriteApps } = state.appState;
 
     // if (initFavourite[appId] === false) favouriteApps[appId] = false; // if user default app is not favourite, remove from sidebar
     closedWindows[appId] = true; // closes the app's window
@@ -281,7 +287,7 @@ const DesktopScreen = () => {
     // if there is atleast one app opened, give it focus
     if (!isAllMinimised()) {
       for (const index in state.alreadyOpenedApps) {
-        if (!state.minimizedWindows[state.alreadyOpenedApps[index]]) {
+        if (!state.appState.minimizedWindows[state.alreadyOpenedApps[index]]) {
           focusApp(state.alreadyOpenedApps[index]);
           break;
         }
@@ -301,6 +307,7 @@ const DesktopScreen = () => {
   };
 
   const focusApp = (appId) => {
+    console.log("first");
     var focusedWindows = state.appState.focusedWindows;
     focusedWindows[appId] = true;
     for (let key in focusedWindows) {
@@ -340,10 +347,7 @@ const DesktopScreen = () => {
     actions.setAppState({ hideSideBar: hide, overlappedWindows });
   };
 
-  console.log(
-    state.appState.minimizedWindows["vscode"] !== undefined,
-    !state.appState.minimizedWindows?.["vscode"]
-  );
+  console.log(state);
 
   return (
     <Box
@@ -390,7 +394,7 @@ const DesktopScreen = () => {
                   id={app.id}
                   tittle={app.title}
                   screen={app.screen}
-                  hasMinimized={hasMinimized}
+                  minimizeWindow={minimizeWindow}
                   hideSideBar={hideSideBar}
                   closeWindow={closeApp}
                   minimized={state.appState.minimizedWindows[app.id]}

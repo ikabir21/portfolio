@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SideBar = (props) => {
-  console.log(props);
   const { state, actions } = useContext(AppContext);
   const classes = useStyles();
 
@@ -75,6 +74,7 @@ const SideBar = (props) => {
               key={i}
               disablePadding
               className={classes.listItem}
+              id={"sidebar-" + app.id}
             >
               {state.appState.closedWindows?.[app.id] !== undefined &&
                 !state.appState.closedWindows?.[app.id] && <DotIcon />}

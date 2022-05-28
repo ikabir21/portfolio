@@ -130,9 +130,18 @@ const AppContainer = (props) => {
   };
 
   const minimizeWindow = () => {
-    alert("hi");
+    let posX = -400;
+    if (obj.maximized) posX = -510;
+
+    let r = document.querySelector("#sidebar-" + props.id);
+    let sidebBarApp = r.getBoundingClientRect();
+
+    r = document.querySelector("#" + props.id);
+
     setWinowsPosition();
-    props.hasMinimized(props.id);
+
+    r.style.transform = `translate(${posX}px,${sidebBarApp.y.toFixed(1) - 240}px) scale(0.2)`;
+    props.minimizeWindow(props.id);
   };
 
   const closeWindow = () => {
