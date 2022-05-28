@@ -28,7 +28,7 @@ const WindowEditButtons = (props) => {
         <span onClick={props.maximizeWindow}>
           {props.isMaximised ? <MaximizeIcon1 /> : <MaximizeIcon2 />}
         </span>
-        <button tabIndex="-1" id={`close-${props.id}`} onClick={props.close}>
+        <button tabIndex="-1" id={`close-${props.id}`} onClick={props.closeWindow}>
           <CloseIcon />
         </button>
       </div>
@@ -137,11 +137,11 @@ const AppContainer = (props) => {
 
   const closeWindow = () => {
     setWinowsPosition();
-    setObj({ closed: true }, () => {
-      setTimeout(() => {
-        props.closedWindow(props.id);
-      }, 300);
-    });
+    props.hideSideBar(props.id, false);
+    setObj({ closed: true });
+    setTimeout(() => {
+      props.closeWindow(props.id);
+    }, 300);
   };
 
   const setWinowsPosition = () => {
@@ -173,8 +173,8 @@ const AppContainer = (props) => {
       bounds={{
         left: -64,
         top: 0,
-        right: obj.parentSize.width,
-        bottom: obj.parentSize.height
+        right: obj?.parentSize?.width,
+        bottom: obj?.parentSize?.height
       }}
       // onMouseDown={eventControl}
       // onMouseUp={eventControl}

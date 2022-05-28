@@ -7,6 +7,7 @@ export const initialState = {
   isAuth: localStorage.getItem("isAuth") ? localStorage.getItem("isAuth") : false,
   bgImage: localStorage.getItem("bgImage") ? localStorage.getItem("bgImage") : bgImage,
   alreadyOpenedApps: [],
+  initFavourite: {},
   appState: {
     focusedWindows: {},
     closedWindows: {},
