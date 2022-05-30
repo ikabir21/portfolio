@@ -97,7 +97,7 @@ const WindowTopBar = (props) => {
       }}
     >
       <Typography
-        variant="caption"
+        variant="body2"
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -133,6 +133,18 @@ const WindowEditButtons = (props) => {
   );
 };
 
+const WindowBody = (props) => {
+  console.log(props);
+  return (
+    <Box
+      sx={{ width: "100%", zIndex: 20, maxHeight: "100%", overflowY: "auto", flexGrow: 1 }}
+      className="windowMainScreen"
+    >
+      {props.screen}
+    </Box>
+  );
+};
+
 const AppContainer = (props) => {
   const [obj, setObj] = useState({
     x: 200,
@@ -163,6 +175,7 @@ const AppContainer = (props) => {
     r.style.transform = `translate(${posx},${posy})`;
     setTimeout(() => {
       setObj((state) => ({ ...state, maximized: false }));
+      checkOverlap();
     }, 300);
   };
 
@@ -301,7 +314,7 @@ const AppContainer = (props) => {
       >
         <WindowBorder x={false} resize={resizeY} />
         <WindowBorder x={true} resize={resizeX} />
-        <WindowTopBar isDrag={obj.isDrag} title={"APP NAME"} />
+        <WindowTopBar isDrag={obj.isDrag} title={props.title} />
         <WindowEditButtons
           minimizeWindow={minimizeWindow}
           maximizeWindow={maximizeWindow}
@@ -322,6 +335,7 @@ const AppContainer = (props) => {
             openApp={props.openApp}
           />
         )} */}
+        <WindowBody screen={props.screen} />
       </div>
     </Draggable>
   );

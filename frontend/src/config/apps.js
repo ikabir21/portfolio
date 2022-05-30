@@ -1,8 +1,19 @@
 import { HomeIcon, SpotifyIcon, TrashIcon, VsCodeIcon } from "../assets/svg/apps";
-import displayVsCode from "../components/apps/vscode";
+import FirefoxIcon from "../assets/svg/FirefoxIcon";
+import VsCode from "../components/apps/VsCode";
 import displaySpotify from "../components/apps/spotify";
+import Firefox from "../components/apps/Firefox";
 
 const apps = [
+  {
+    id: "firefox",
+    title: "Firefox",
+    icon: <FirefoxIcon />,
+    isDisabled: false,
+    isFavourite: true,
+    isDesktopShortcut: true,
+    screen: <Firefox />
+  },
   {
     id: "ikabir",
     title: "ikabir",
@@ -10,16 +21,16 @@ const apps = [
     isDisabled: false,
     isFavourite: false,
     isDesktopShortcut: true,
-    screen: displayVsCode
+    screen: <VsCode />
   },
   {
     id: "vscode",
-    title: "Code",
+    title: "Visual Studio Code",
     icon: <VsCodeIcon />,
     isDisabled: false,
     isFavourite: true,
     isDesktopShortcut: true,
-    screen: displayVsCode
+    screen: <VsCode />
   },
   {
     id: "spotify",
@@ -39,15 +50,6 @@ const apps = [
     isDesktopShortcut: true,
     screen: displaySpotify
   }
-  // {
-  //   id: "ikabir",
-  //   title: "ikabir",
-  //   icon: <HomeIcon />,
-  //   isDisabled: false,
-  //   isFavourite: false,
-  //   isDesktopShortcut: true,
-  //   screen: displayVsCode
-  // },
   // {
   //   id: "vscode",
   //   title: "Code",

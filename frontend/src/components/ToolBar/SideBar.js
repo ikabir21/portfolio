@@ -63,7 +63,8 @@ const SideBar = (props) => {
         backgroundColor: "#151515",
         padding: ".3ch",
         transform: props.isSideBarHidden && "translateX(-100%)",
-        transitionDuration: ".3s"
+        transitionDuration: ".3s",
+        paddingTop: "1ch"
       }}
       id="sidebar"
     >

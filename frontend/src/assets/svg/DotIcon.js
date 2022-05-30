@@ -5,8 +5,8 @@ const DotIcon = (props) => {
   return (
     <SvgIcon
       sx={{
-        width: "7px",
-        height: "7px",
+        width: "4px",
+        height: "4px",
         position: "absolute",
         left: 0
       }}

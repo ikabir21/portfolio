@@ -393,7 +393,7 @@ const DesktopScreen = () => {
                 <AppContainer
                   key={i}
                   id={app.id}
-                  tittle={app.title}
+                  title={app.title}
                   screen={app.screen}
                   minimizeWindow={minimizeWindow}
                   hideSideBar={hideSideBar}
