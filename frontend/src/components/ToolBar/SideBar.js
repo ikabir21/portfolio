@@ -65,6 +65,7 @@ const SideBar = (props) => {
         transform: props.isSideBarHidden && "translateX(-100%)",
         transitionDuration: ".3s"
       }}
+      id="sidebar"
     >
       {state.apps.map(
         (app, i) =>

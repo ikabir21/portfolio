@@ -10,51 +10,133 @@ import MaximizeIcon1 from "../assets/svg/MaximizeIcon1";
 import MaximizeIcon2 from "../assets/svg/MaximizeIcon2";
 import CloseIcon from "../assets/svg/CloseIcon";
 
-const WindowEditButtons = (props) => {
+const useStyles = makeStyles((theme) => ({
+  windowTopBarContainer: {
+    position: "absolute",
+    userSelect: "none",
+    right: 0,
+    top: 0,
+    marginRight: "0.375rem",
+    marginTop: "0.375rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "& > span": {
+      borderRadius: "100%"
+    },
+    "& > span:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.1)"
+    },
+    "& svg": {
+      width: "1rem",
+      height: "1rem",
+      maxWidth: "100%"
+    },
+    "& button": {
+      borderRadius: "50%",
+      backgroundColor: "#E95420",
+      color: "#eee",
+      border: "none"
+    }
+  },
+  windowEditIcon: {
+    width: "1.3rem",
+    height: "1.3rem",
+    maxWidth: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "0.375rem",
+    marginRight: "0.375rem"
+  }
+}));
+
+const WindowBorder = (props) => {
+  let img = {};
+  useEffect(() => {
+    img = new Image(0, 0);
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    img.style.opacity = 0;
+  }, []);
   return (
     <Box
-      backgroundColor="#111"
-      display="flex"
-      justifyContent="space-between"
-      alignItems="center"
-      sx={{ cursor: props?.isDrag ? "grabbing !important" : "default" }}
+      className={props.x ? "window-x-border" : "window-y-border"}
+      sx={{
+        borderColor: "transparent",
+        position: "absolute",
+        transform: "translate(-50%,-50%)",
+        left: "50%",
+        top: "50%"
+      }}
+      onDragStart={(e) => {
+        alert("hi");
+        e.dataTransfer.setDragImage(img, 0, 0);
+      }}
+      onDrag={props.resize}
+    />
+  );
+};
+
+const WindowTopBar = (props) => {
+  return (
+    <Box
+      className={
+        " relative bg-ub-window-title border-t-2 border-white border-opacity-5 py-1.5 px-3 text-white w-full select-none rounded-b-none"
+      }
+      sx={{
+        backgroundColor: "#201F1F",
+        position: "relative",
+        borderColor: "rgba(255, 255, 255, 0.05)",
+        borderTopWidth: "2px",
+        width: "100%",
+        borderTopRightRadius: "1ch",
+        borderTopLeftRadius: "1ch",
+        userSelect: "none",
+        padding: ".375rem .75rem",
+        cursor: props?.isDrag ? "move !important" : "default"
+      }}
     >
-      <div />
-      <Typography>{props.title || "APP TITLE HERE"}</Typography>
-      <div>
-        <span onClick={props.minimizeWindow}>
-          <MinimizeIcon />
-        </span>
-        <span onClick={props.maximizeWindow}>
-          {props.isMaximised ? <MaximizeIcon1 /> : <MaximizeIcon2 />}
-        </span>
-        <button tabIndex="-1" id={`close-${props.id}`} onClick={props.closeWindow}>
-          <CloseIcon />
-        </button>
-      </div>
+      <Typography
+        variant="caption"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          fontWeight: 700,
+          cursor: props?.isDrag ? "move !important" : "default"
+        }}
+      >
+        {props.title}
+      </Typography>
     </Box>
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  rnd: {
-    left: `${theme.spacing(8)} !important`,
-    top: `${theme.spacing(3)} !important`,
-    position: "absolute",
-
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#f0f0f0",
-    border: "none",
-    borderRadius: "5px 5px 0 0"
-  }
-}));
+const WindowEditButtons = (props) => {
+  const classes = useStyles();
+  return (
+    <Box className={classes.windowTopBarContainer}>
+      <span onClick={props.minimizeWindow} className={classes.windowEditIcon}>
+        <MinimizeIcon />
+      </span>
+      <span onClick={props.maximizeWindow} className={classes.windowEditIcon}>
+        {props.isMaximised ? <MaximizeIcon2 /> : <MaximizeIcon1 />}
+      </span>
+      <button
+        tabIndex="-1"
+        id={`close-${props.id}`}
+        onClick={props.closeWindow}
+        className={classes.windowEditIcon}
+      >
+        <CloseIcon />
+      </button>
+    </Box>
+  );
+};
 
 const AppContainer = (props) => {
   const [obj, setObj] = useState({
-    x: 60,
-    y: 10,
+    x: 200,
+    y: 50,
     isDrag: false,
     width: 60,
     height: 85,
@@ -72,33 +154,32 @@ const AppContainer = (props) => {
   }, []);
 
   const restoreWindow = () => {
-    var r = document.querySelector("#" + props.id);
+    const r = document.querySelector("#" + props.id);
     setDefaultWindowDimenstion();
     // get previous position
-    let posx = r.style.getPropertyValue("--window-transform-x");
-    let posy = r.style.getPropertyValue("--window-transform-y");
+    const posx = r.style.getPropertyValue("--window-transform-x");
+    const posy = r.style.getPropertyValue("--window-transform-y");
 
     r.style.transform = `translate(${posx},${posy})`;
     setTimeout(() => {
-      setObj({ maximized: false });
-      // checkOverlap();
+      setObj((state) => ({ ...state, maximized: false }));
     }, 300);
   };
 
   const setDefaultWindowDimenstion = () => {
     if (window.innerWidth < 640) {
-      setObj({ height: 60, width: 85 });
+      setObj((state) => ({ ...state, height: 60, width: 85 }));
       resizeBoundries();
     } else {
-      setObj({ height: 85, width: 60 });
+      setObj((state) => ({ ...state, height: 75, width: 50 }));
       resizeBoundries();
     }
   };
 
   const checkOverlap = () => {
-    var r = document.querySelector("#" + props.id);
-    var rect = r.getBoundingClientRect();
-    if (rect.x.toFixed(1) < 100) {
+    const r = document.querySelector("#" + props.id);
+    const rect = r.getBoundingClientRect();
+    if (rect.x.toFixed(1) < 65) {
       console.log(props.id);
       // if this window overlapps with SideBar
       props.hideSideBar(props.id, true);
@@ -108,39 +189,50 @@ const AppContainer = (props) => {
   };
 
   const resizeBoundries = () => {
-    setObj({
+    setObj((state) => ({
+      ...state,
       parentSize: {
-        height: window.innerHeight - window.innerHeight * (obj.height / 100.0),
-        width: window.innerWidth - window.innerWidth * (obj.width / 100.0) - 65
+        height: window.innerHeight - window.innerHeight * (state.height / 100.0),
+        width: window.innerWidth - window.innerWidth * (state.width / 100.0)
       }
-    });
+    }));
+  };
+
+  const resizeX = () => {
+    console.log("object2");
+    setObj((state) => ({ ...state, width: obj.width + 0.1 }));
+    resizeBoundries();
+  };
+  const resizeY = () => {
+    console.log("object1");
+    setObj((state) => ({ ...state, width: obj.height + 0.1 }));
+    resizeBoundries();
   };
 
   const maximizeWindow = () => {
+    console.log(obj);
     if (obj.maximized) {
       restoreWindow();
     } else {
-      props.focusWindow(props.id);
+      props.focusApp(props.id);
       var r = document.querySelector("#" + props.id);
       setWinowsPosition();
       // translate window to maximize position
       r.style.transform = `translate(-1pt,-2pt)`;
-      setObj({ maximized: true, height: 96.3, width: 100.2 });
+      setObj((state) => ({ ...state, maximized: true, height: 100, width: 100 }));
+      props.hideSideBar(props.id, true);
     }
   };
 
   const minimizeWindow = () => {
-    let posX = -400;
-    if (obj.maximized) posX = -510;
-
-    let r = document.querySelector("#sidebar-" + props.id);
-    let sidebBarApp = r.getBoundingClientRect();
-
-    r = document.querySelector("#" + props.id);
-
+    const posX = -700;
     setWinowsPosition();
 
-    r.style.transform = `translate(${posX}px,${sidebBarApp.y.toFixed(1) - 240}px) scale(0.2)`;
+    let r = document.querySelector("#sidebar-" + props.id);
+    const sidebBarApp = r.getBoundingClientRect();
+
+    r = document.querySelector("#" + props.id);
+    r.style.transform = `translate(${posX}px,${sidebBarApp.y - 240}px) scale(0.2)`;
     props.minimizeWindow(props.id);
   };
 
@@ -154,8 +246,9 @@ const AppContainer = (props) => {
   };
 
   const setWinowsPosition = () => {
-    var r = document.querySelector("#" + props.id);
-    var rect = r.getBoundingClientRect();
+    const r = document.querySelector("#" + props.id);
+    const rect = r.getBoundingClientRect();
+    console.log(rect, 2);
     r.style.setProperty("--window-transform-x", rect.x.toFixed(1).toString() + "px");
     r.style.setProperty("--window-transform-y", (rect.y.toFixed(1) - 32).toString() + "px");
   };
@@ -165,7 +258,11 @@ const AppContainer = (props) => {
   //   setAppState((state) => ({ ...state, x: x + d.x, y: y + d.y }));
   // };
 
-  const handleStart = () => setObj((state) => ({ ...state, isDrag: true }));
+  const handleStart = () => {
+    props.focusApp(props.id);
+    if (obj.maximized) restoreWindow();
+    setObj((state) => ({ ...state, isDrag: true }));
+  };
 
   const handleStop = () => setObj((state) => ({ ...state, isDrag: false }));
 
@@ -180,16 +277,11 @@ const AppContainer = (props) => {
       allowAnyClick={false}
       defaultPosition={{ x: obj.x, y: obj.y }}
       bounds={{
-        left: -64,
+        left: 0,
         top: 0,
         right: obj?.parentSize?.width,
         bottom: obj?.parentSize?.height
       }}
-      // onMouseDown={eventControl}
-      // onMouseUp={eventControl}
-      // onTouchStart={eventControl}
-      // onTouchEnd={eventControl}
-      // style={{ position: "absolute", zIndex: 30 }}
     >
       <div
         style={{
@@ -197,19 +289,25 @@ const AppContainer = (props) => {
           height: `${obj.height}%`,
           backgroundColor: "#333",
           position: "absolute",
-          zIndex: 30
+          zIndex: 30,
+          borderTopRightRadius: "1ch",
+          borderTopLeftRadius: "1ch",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          cursor: props?.isDrag ? "move !important" : "default"
         }}
         id={props.id}
       >
-        {/* <WindowYBorder resize={handleHorizontalResize} />
-        <WindowXBorder resize={handleVerticleResize} />*/}
+        <WindowBorder x={false} resize={resizeY} />
+        <WindowBorder x={true} resize={resizeX} />
+        <WindowTopBar isDrag={obj.isDrag} title={"APP NAME"} />
         <WindowEditButtons
           minimizeWindow={minimizeWindow}
           maximizeWindow={maximizeWindow}
           isMaximised={obj.maximized}
           closeWindow={closeWindow}
           id={props.id}
-          isDrag={obj.isDrag}
         />
         {/* {props.id === "settings" ? (
           <Settings

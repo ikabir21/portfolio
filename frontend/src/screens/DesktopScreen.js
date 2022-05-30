@@ -275,12 +275,13 @@ const DesktopScreen = () => {
     hideSideBar(null, false);
 
     // close window
-    const { closedWindows, favouriteApps } = state.appState;
+    const { closedWindows, favouriteApps, minimizedWindows } = state.appState;
 
     // if (initFavourite[appId] === false) favouriteApps[appId] = false; // if user default app is not favourite, remove from sidebar
+    minimizedWindows[appId] = false; // closes the app's window
     closedWindows[appId] = true; // closes the app's window
 
-    actions.setAppState({ closedWindows, favouriteApps });
+    actions.setAppState({ closedWindows, favouriteApps, minimizeWindow });
   };
 
   const focusLastApp = () => {
@@ -382,7 +383,7 @@ const DesktopScreen = () => {
         {/* Desktop Area */}
 
         <div
-          style={{ height: "100%", width: "100%", position: "absolute" }}
+          style={{ height: "100%", width: "100%", position: "absolute", left: 0, top: 0 }}
           data-context="desktop-area"
         >
           {apps.map(
@@ -397,6 +398,7 @@ const DesktopScreen = () => {
                   minimizeWindow={minimizeWindow}
                   hideSideBar={hideSideBar}
                   closeWindow={closeApp}
+                  focusApp={focusApp}
                   minimized={state.appState.minimizedWindows[app.id]}
                 />
               )
