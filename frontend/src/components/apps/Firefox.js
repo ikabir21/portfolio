@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 import RefreshIcon from "../../assets/svg/RefreshIcon";
 import HomeIcon from "../../assets/svg/HomeIcon";
-import LeftIcon from "../../assets/svg/LeftIcon";
-import RightIcon from "../../assets/svg/RightIcon";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   icon: {
     width: "3.5ch",
     height: "3.6ch",
@@ -43,10 +41,47 @@ const Firefox = () => {
   const [displayUrl, setDisplayUrl] = useState("https://www.google.com");
 
   const classes = useStyles();
+  const elm = useRef(null);
 
-  //   useEffect(() => {
-  //     // let lastVisi
-  //   }, []);
+  const goToHome = () => {
+    setUrl("https://www.google.com/webhp?igu=1");
+    setDisplayUrl("https://www.google.com");
+    refresh();
+  };
+
+  const refresh = () => {
+    console.log(elm.current.src);
+    if (elm.current.src) elm.current.src += "";
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === "Enter") {
+      let url = e.target.value.trim();
+      let displayUrl = "";
+
+      if (url.length === 0) return;
+
+      if (url.indexOf("http://") !== 0 && url.indexOf("https://") !== 0) {
+        url = "https://" + url;
+      }
+
+      url = encodeURI(url);
+      displayUrl = url;
+      if (url.includes("google.com")) {
+        url = "https://www.google.com/webhp?igu=1";
+        displayUrl = "https://www.google.com";
+      }
+      setUrl(url);
+      setDisplayUrl(displayUrl);
+      // this.storeVisitedUrl(url, display_url);
+      // document.getElementById("chrome-url-bar").blur();
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(elm.current);
+  // }, [elm]);
+
   return (
     <Box
       sx={{
@@ -68,36 +103,31 @@ const Firefox = () => {
         }}
         className="text-white text-sm border-b border-gray-900"
       >
-        <div onClick={() => {}} className={classes.icon}>
-          <LeftIcon />
-        </div>
-        <div onClick={() => {}} className={classes.icon}>
-          <RightIcon />
-        </div>
-        <div onClick={() => {}} className={classes.icon}>
+        <div onClick={refresh} className={classes.icon}>
           <RefreshIcon />
         </div>
-        <div onClick={() => {}} className={classes.icon}>
+        <div onClick={goToHome} className={classes.icon}>
           <HomeIcon />
         </div>
         <input
           className={classes.urlInput}
-          onKeyDown={() => {}}
-          onChange={() => {}}
+          onKeyDown={onKeyDown}
+          onChange={(e) => setDisplayUrl(e.target.value)}
+          onFocus={(e) => e.target.select()}
           value={displayUrl}
-          id="firefox-url-bar"
           type="url"
           spellCheck={false}
           autoComplete="off"
         />
       </Box>
       <iframe
+        ref={elm}
         style={{ flexGrow: 1 }}
         src={url}
         id="firefox-screen"
         frameBorder="0"
         title="Ubuntu Firefox"
-      ></iframe>
+      />
     </Box>
   );
 };

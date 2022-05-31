@@ -214,7 +214,6 @@ const DesktopScreen = () => {
   };
 
   const openApp = (appId) => {
-    console.log(state, "hi");
     if (state.appState.minimizedWindows?.[appId]) {
       focusApp(appId);
 
@@ -308,7 +307,6 @@ const DesktopScreen = () => {
   };
 
   const focusApp = (appId) => {
-    console.log("first");
     var focusedWindows = state.appState.focusedWindows;
     focusedWindows[appId] = true;
     for (let key in focusedWindows) {
@@ -347,8 +345,6 @@ const DesktopScreen = () => {
     overlappedWindows[objId] = hide;
     actions.setAppState({ hideSideBar: hide, overlappedWindows });
   };
-
-  console.log(state);
 
   return (
     <Box

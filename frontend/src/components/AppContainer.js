@@ -134,7 +134,6 @@ const WindowEditButtons = (props) => {
 };
 
 const WindowBody = (props) => {
-  console.log(props);
   return (
     <Box
       sx={{ width: "100%", zIndex: 20, maxHeight: "100%", overflowY: "auto", flexGrow: 1 }}
@@ -184,7 +183,7 @@ const AppContainer = (props) => {
       setObj((state) => ({ ...state, height: 60, width: 85 }));
       resizeBoundries();
     } else {
-      setObj((state) => ({ ...state, height: 75, width: 50 }));
+      setObj((state) => ({ ...state, height: 85, width: 60 }));
       resizeBoundries();
     }
   };
@@ -223,7 +222,6 @@ const AppContainer = (props) => {
   };
 
   const maximizeWindow = () => {
-    console.log(obj);
     if (obj.maximized) {
       restoreWindow();
     } else {
@@ -261,7 +259,6 @@ const AppContainer = (props) => {
   const setWinowsPosition = () => {
     const r = document.querySelector("#" + props.id);
     const rect = r.getBoundingClientRect();
-    console.log(rect, 2);
     r.style.setProperty("--window-transform-x", rect.x.toFixed(1).toString() + "px");
     r.style.setProperty("--window-transform-y", (rect.y.toFixed(1) - 32).toString() + "px");
   };
