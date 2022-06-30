@@ -395,6 +395,7 @@ const DesktopScreen = () => {
                   hideSideBar={hideSideBar}
                   closeWindow={closeApp}
                   focusApp={focusApp}
+                  openApp={openApp}
                   minimized={state.appState.minimizedWindows[app.id]}
                 />
               )

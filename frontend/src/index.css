@@ -76,3 +76,16 @@ li {
   background-color: #D3D7CF;
   border-radius: 5px;
 }
+.class1 {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.class2 {
+  font-weight: bold;
+  margin-right: 1ch;
+  color: blue;
+}
+.giphy {
+  width: 40%;
+}

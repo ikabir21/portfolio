@@ -120,14 +120,7 @@ const Firefox = () => {
           autoComplete="off"
         />
       </Box>
-      <iframe
-        ref={elm}
-        style={{ flexGrow: 1 }}
-        src={url}
-        id="firefox-screen"
-        frameBorder="0"
-        title="Ubuntu Firefox"
-      />
+      <iframe ref={elm} style={{ flexGrow: 1 }} src={url} frameBorder="0" />
     </Box>
   );
 };

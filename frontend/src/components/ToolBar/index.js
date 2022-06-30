@@ -114,13 +114,13 @@ const ToolBar = ({ color = "#4F194D" }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    const interval = setInterval(() => setDate(moment().format("ddd MMM DD HH:mm:ss")), 1000);
+    const interval = setInterval(() => setDate(moment().format("ddd MMM D HH:mm:ss")), 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   const curMonth = moment().format("MMMM");
-  const curDate = moment().format("DD");
+  const curDate = moment().format("D");
   const curDay = moment().format("dddd");
   const curYear = moment().format("YYYY");
 

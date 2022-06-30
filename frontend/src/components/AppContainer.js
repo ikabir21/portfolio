@@ -9,8 +9,9 @@ import MinimizeIcon from "../assets/svg/MinimizeIcon";
 import MaximizeIcon1 from "../assets/svg/MaximizeIcon1";
 import MaximizeIcon2 from "../assets/svg/MaximizeIcon2";
 import CloseIcon from "../assets/svg/CloseIcon";
+import { displayTerminal } from "./apps/Terminal";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   windowTopBarContainer: {
     position: "absolute",
     userSelect: "none",
@@ -139,7 +140,7 @@ const WindowBody = (props) => {
       sx={{ width: "100%", zIndex: 20, maxHeight: "100%", overflowY: "auto", flexGrow: 1 }}
       className="windowMainScreen"
     >
-      {props.screen}
+      {props.isOpenApp ? displayTerminal(props.openApp) : props.screen}
     </Box>
   );
 };
@@ -158,6 +159,8 @@ const AppContainer = (props) => {
       width: 100
     }
   });
+
+  const { state, actions } = useContext(AppContext);
 
   useEffect(() => {
     setDefaultWindowDimenstion();
@@ -273,9 +276,8 @@ const AppContainer = (props) => {
     if (obj.maximized) restoreWindow();
     setObj((state) => ({ ...state, isDrag: true }));
   };
-
+  console.log(props.id);
   const handleStop = () => setObj((state) => ({ ...state, isDrag: false }));
-
   return (
     <Draggable
       axis="both"
@@ -299,7 +301,7 @@ const AppContainer = (props) => {
           height: `${obj.height}%`,
           backgroundColor: "#333",
           position: "absolute",
-          zIndex: 30,
+          zIndex: state.appState.focusedWindows[props.id] ? 1000 : 30,
           borderTopRightRadius: "1ch",
           borderTopLeftRadius: "1ch",
           display: "flex",
@@ -332,7 +334,11 @@ const AppContainer = (props) => {
             openApp={props.openApp}
           />
         )} */}
-        <WindowBody screen={props.screen} />
+        <WindowBody
+          isOpenApp={props.id === "terminal"}
+          openApp={props.openApp}
+          screen={props.screen}
+        />
       </div>
     </Draggable>
   );

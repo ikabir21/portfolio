@@ -4,8 +4,11 @@ import TerminalIcon from "../assets/svg/TerminalIcon";
 import PostmanIcon from "../assets/svg/PostmanIcon";
 import DiscordIcon from "../assets/svg/DiscordIcon";
 import VsCode from "../components/apps/VsCode";
-import displaySpotify from "../components/apps/spotify";
 import Firefox from "../components/apps/Firefox";
+import Postman from "../components/apps/Postman";
+import Discord from "../components/apps/Discord";
+import Spotify from "../components/apps/Spotify";
+import Terminal from "../components/apps/Terminal";
 
 const apps = [
   {
@@ -22,7 +25,7 @@ const apps = [
     title: "ikabir",
     icon: <HomeIcon />,
     isDisabled: false,
-    isFavourite: false,
+    isFavourite: true,
     isDesktopShortcut: true,
     screen: <VsCode />
   },
@@ -42,7 +45,7 @@ const apps = [
     isDisabled: false,
     isFavourite: true,
     isDesktopShortcut: true,
-    screen: displaySpotify
+    screen: <Spotify />
   },
   {
     id: "trash",
@@ -51,7 +54,7 @@ const apps = [
     isDisabled: false,
     isFavourite: false,
     isDesktopShortcut: true,
-    screen: displaySpotify
+    screen: <Spotify />
   },
   {
     id: "terminal",
@@ -60,7 +63,7 @@ const apps = [
     isDisabled: false,
     isFavourite: true,
     isDesktopShortcut: false,
-    screen: <VsCode />
+    screen: <Terminal />
   },
   {
     id: "postman",
@@ -69,7 +72,7 @@ const apps = [
     isDisabled: false,
     isFavourite: true,
     isDesktopShortcut: false,
-    screen: displaySpotify
+    screen: <Postman />
   },
   {
     id: "discord",
@@ -78,7 +81,7 @@ const apps = [
     isDisabled: false,
     isFavourite: true,
     isDesktopShortcut: false,
-    screen: displaySpotify
+    screen: <Discord />
   }
   // {
   //   id: "vscode",
