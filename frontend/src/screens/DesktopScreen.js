@@ -18,6 +18,7 @@ import ToolBar from "../components/ToolBar";
 import AppContainer from "../components/AppContainer";
 import apps from "../config/apps";
 import { Fade } from "@mui/material";
+import ShowAllApps from "./ShowAllApps";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     outline: "2px solid transparent",
     outlineOffset: "2px",
     textAlign: "center",
@@ -53,8 +54,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "rgba(255,255,255,0.2)"
     },
     "& > svg": {
-      width: "2.5rem",
-      height: "2.5rem",
+      // width: "2.5rem",
+      // height: "2.5rem",
+      transform: "scale(1.4)",
       display: "block"
     }
   },
@@ -226,27 +228,28 @@ const DesktopScreen = () => {
       const minimizedWindows = state.appState.minimizedWindows;
       minimizedWindows[appId] = false;
       actions.setAppState({ minimizedWindows });
+      return;
     }
 
     // Already opened
     if (state.alreadyOpenedApps.includes(appId)) focusApp(appId);
     else {
       const { closedWindows, favouriteApps } = state.appState;
-      const frequentApps = localStorage.getItem("frequentApps")
-        ? JSON.parse(localStorage.getItem("frequentApps"))
+      const freqApps = localStorage.getItem("freqApps")
+        ? JSON.parse(localStorage.getItem("freqApps"))
         : [];
-      const currentApp = frequentApps.find((app) => app.id === appId);
+      const currentApp = freqApps.find((app) => app.id === appId);
       if (currentApp) {
-        frequentApps.forEach((app) => {
+        freqApps.forEach((app) => {
           if (app.id === currentApp.id) {
             app.frequency += 1;
           }
         });
       } else {
-        frequentApps.push({ id: appId, frequency: 1 });
+        freqApps.push({ id: appId, frequency: 1 });
       }
 
-      frequentApps.sort((a, b) => {
+      freqApps.sort((a, b) => {
         if (a.frequency < b.frequency) {
           return 1;
         }
@@ -256,12 +259,12 @@ const DesktopScreen = () => {
         return 0;
       });
 
-      localStorage.setItem("frequentApps", JSON.stringify(frequentApps));
+      localStorage.setItem("freqApps", JSON.stringify(freqApps));
 
       setTimeout(() => {
         favouriteApps[appId] = true;
         closedWindows[appId] = false;
-        actions.setAppState({ closedWindows, favouriteApps, allAppsView: false });
+        actions.setAppState({ closedWindows, favouriteApps, allApps: false });
         focusApp(appId);
         actions.setAlreadyOpenedApps(appId);
       }, 200);
@@ -278,8 +281,8 @@ const DesktopScreen = () => {
     const { closedWindows, favouriteApps, minimizedWindows } = state.appState;
 
     // if (initFavourite[appId] === false) favouriteApps[appId] = false; // if user default app is not favourite, remove from sidebar
-    minimizedWindows[appId] = false; // closes the app's window
-    closedWindows[appId] = true; // closes the app's window
+    minimizedWindows[appId] = false;
+    closedWindows[appId] = true;
 
     actions.setAppState({ closedWindows, favouriteApps, minimizeWindow });
   };
@@ -347,6 +350,8 @@ const DesktopScreen = () => {
     actions.setAppState({ hideSideBar: hide, overlappedWindows });
   };
 
+  const showAllApps = () => actions.setAllApps(!state.allApps);
+
   return (
     <Fade in={Boolean(state?.isAuth)} {...(state?.isAuth ? { timeout: 1000 } : {})}>
       <Box
@@ -361,7 +366,7 @@ const DesktopScreen = () => {
         }}
         className={classes.container}
       >
-        <ToolBar color="#343434" />
+        <ToolBar />
         <Box
           sx={{
             width: "100%",
@@ -375,7 +380,8 @@ const DesktopScreen = () => {
             // alignContent: "flex-end",
             flexWrap: "wrap-reverse",
             overflow: "hidden",
-            paddingLeft: "8ch"
+            pl: "7ch",
+            pt: "1ch"
           }}
         >
           {/* Desktop Area */}
@@ -425,6 +431,8 @@ const DesktopScreen = () => {
             hideSideBar={hideSideBar}
             isSideBarHidden={state.appState.hideSideBar}
             openApp={openApp}
+            showAllApps={showAllApps}
+            allApps={state.allApps}
           />
           <Box sx={{ width: ".25rem", height: "100%", position: "absolute", left: 0, top: 0 }} />
           {state.apps.map(
@@ -432,11 +440,14 @@ const DesktopScreen = () => {
               app.isDesktopShortcut && (
                 <Box key={i} onDoubleClick={() => openApp(app.id)} className={classes.app}>
                   {app.icon}
-                  <Typography variant="body2" align="center">
+                  <Typography sx={{ mt: 0.5 }} variant="body2" align="center">
                     {app.title}
                   </Typography>
                 </Box>
               )
+          )}
+          {state.allApps && (
+            <ShowAllApps apps={apps} recentApps={state.alreadyOpenedApps} openApp={openApp} />
           )}
         </Box>
         {showContextMenu && <ContextMenu coordinate={coordinate} />}

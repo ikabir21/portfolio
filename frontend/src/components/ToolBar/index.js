@@ -109,7 +109,7 @@ const CustomSwitch = styled(Switch)(() => ({
   }
 }));
 
-const ToolBar = ({ color = "#4F194D" }) => {
+const ToolBar = () => {
   const [date, setDate] = useState(moment().format("ddd MMM DD HH:mm:ss"));
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
@@ -272,7 +272,7 @@ const ToolBar = ({ color = "#4F194D" }) => {
   );
 
   return (
-    <AppBar elevation={0} sx={{ backgroundColor: "#111111" }} position="absolute">
+    <AppBar elevation={0} sx={{ backgroundColor: "#111", zIndex: 30 }} position="absolute">
       <Toolbar variant="dense" className={classes.toolBar} disableGutters>
         <ClickAwayListener onClickAway={() => setOption((state) => ({ ...state, one: false }))}>
           <Typography

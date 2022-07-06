@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     width: "auto",
     zIndex: 40,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    boxShadow: 3,
     paddingTop: theme.spacing(1)
   },
   listItem: {
@@ -36,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "rgba(255, 255, 255, 0.1)"
     },
-    "& > svg": {
-      transform: "scale(1.8)"
+    "& svg": {
+      transform: "scale(1.4)"
     }
   }
 }));
@@ -109,7 +110,7 @@ const SideBar = (props) => {
           )
       )}
       <div style={{ flexGrow: 1 }} />
-      <Box disablePadding className={classes.listItem}>
+      <Box disablePadding className={classes.listItem} onClick={props.showAllApps}>
         <Box
           sx={{
             width: "32px",

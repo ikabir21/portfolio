@@ -266,17 +266,11 @@ const AppContainer = (props) => {
     r.style.setProperty("--window-transform-y", (rect.y.toFixed(1) - 32).toString() + "px");
   };
 
-  // const handleDrag = (e, d) => {
-  //   const { x, y } = appState;
-  //   setAppState((state) => ({ ...state, x: x + d.x, y: y + d.y }));
-  // };
-
   const handleStart = () => {
     props.focusApp(props.id);
     if (obj.maximized) restoreWindow();
     setObj((state) => ({ ...state, isDrag: true }));
   };
-  console.log(props.id);
   const handleStop = () => setObj((state) => ({ ...state, isDrag: false }));
   return (
     <Draggable

@@ -1,5 +1,12 @@
 /* eslint-disable no-case-declarations */
-import { AUTH, SET_BG, SET_APP_OPEN, SET_APP_STATE, SET_ALREADY_OPENED_APPS } from "./constants";
+import {
+  AUTH,
+  SET_BG,
+  SET_APP_OPEN,
+  SET_APP_STATE,
+  SET_ALREADY_OPENED_APPS,
+  SET_ALL_APPS
+} from "./constants";
 import bgImage from "../assets/images/ubuntu-20-04-2.webp";
 import apps from "../config/apps";
 
@@ -17,7 +24,8 @@ export const initialState = {
     overlappedWindows: {},
     desktopApps: []
   },
-  apps: apps
+  apps: apps,
+  allApps: false
 };
 
 const reducer = (state, action) => {
@@ -54,6 +62,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         alreadyOpenedApps: apps
+      };
+    case SET_ALL_APPS:
+      return {
+        ...state,
+        allApps: action.payload
       };
   }
   return state;
