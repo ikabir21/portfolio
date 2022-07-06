@@ -36,17 +36,19 @@ import NightModeIcon from "../../assets/svg/NightModeIcon";
 import UpIcon from "../../assets/svg/UpIcon";
 import Calendar from "./Calendar";
 import PropTypes from "prop-types";
+import { ClickAwayListener } from "@mui/material";
 
 const useStyles = makeStyles({
   toolBar: {
     minHeight: "100% !important",
     justifyContent: "space-between",
-    cursor: "default",
-    paddingTop: "0.5ch"
+    cursor: "default"
   },
   list: {
-    padding: "0 1ch",
-    borderBottom: "2px solid #E95420"
+    outline: "2px solid transparent",
+    outlineOffset: "2px",
+    padding: "0.25rem 0.75rem",
+    borderBottom: "2px solid transparent"
   },
   up: {
     position: "absolute",
@@ -112,6 +114,7 @@ const ToolBar = ({ color = "#4F194D" }) => {
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
   const classes = useStyles();
+  const [option, setOption] = useState({ one: false, two: false, three: false });
 
   useEffect(() => {
     const interval = setInterval(() => setDate(moment().format("ddd MMM D HH:mm:ss")), 1000);
@@ -169,7 +172,7 @@ const ToolBar = ({ color = "#4F194D" }) => {
             </Stack>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Stack direction="row" alignItems="center">
-                <Typography sx={{ letterSpacing: "-0.3px" }} variant="body1">
+                <Typography sx={{ letterSpacing: "-0.3px" }} variant="body2">
                   Do Not Disturb
                 </Typography>
                 <CustomSwitch color="secondary" disableRipple />
@@ -178,7 +181,7 @@ const ToolBar = ({ color = "#4F194D" }) => {
                 disableRipple
                 sx={{ color: "#333", border: "1px solid #CECAC5", padding: "4px 18px" }}
               >
-                <Typography sx={{ lineHeight: 1, color: "#444" }} variant="body1">
+                <Typography sx={{ lineHeight: 1, color: "#444" }} variant="body2">
                   Clear
                 </Typography>
               </Button>
@@ -269,11 +272,18 @@ const ToolBar = ({ color = "#4F194D" }) => {
   );
 
   return (
-    <AppBar elevation={0} sx={{ maxHeight: "3ch", backgroundColor: color }} position="absolute">
+    <AppBar elevation={0} sx={{ backgroundColor: "#111111" }} position="absolute">
       <Toolbar variant="dense" className={classes.toolBar} disableGutters>
-        <Typography variant="body1" className={classes.list}>
-          Activities
-        </Typography>
+        <ClickAwayListener onClickAway={() => setOption((state) => ({ ...state, one: false }))}>
+          <Typography
+            variant="body2"
+            sx={{ borderColor: option.one && "#E95420" }}
+            className={classes.list}
+            onClick={() => setOption((state) => ({ ...state, one: true }))}
+          >
+            Activities
+          </Typography>
+        </ClickAwayListener>
 
         <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           <UpIcon
@@ -283,48 +293,58 @@ const ToolBar = ({ color = "#4F194D" }) => {
             }}
             className={classes.up}
           />
-          <Typography
-            aria-controls="notification-menu"
-            aria-haspopup="true"
-            variant="body1"
-            onClick={(e) => setAnchorEl1(e.currentTarget)}
-            className={classes.list}
-          >
-            {date}
-          </Typography>
+          <ClickAwayListener onClickAway={() => setOption((state) => ({ ...state, two: false }))}>
+            <Typography
+              aria-controls="notification-menu"
+              aria-haspopup="true"
+              variant="body2"
+              onClick={(e) => {
+                setAnchorEl1(e.currentTarget);
+                setOption((state) => ({ ...state, two: true }));
+              }}
+              className={classes.list}
+              sx={{ borderColor: option.two && "#E95420" }}
+            >
+              {date}
+            </Typography>
+          </ClickAwayListener>
         </div>
 
         {NotificationAndCalendarMenu}
-
-        <Stack
-          aria-controls="menu-popular-card"
-          aria-haspopup="true"
-          onClick={(e) => setAnchorEl2(e.currentTarget)}
-          direction="row"
-          alignItems="center"
-          className={classes.list}
-          spacing={0.5}
-          sx={{ position: "relative" }}
-        >
-          <NightModeIcon fontSize="small" />
-          <WifiIcon fontSize="small" />
-          <BlueToothIcon fontSize="small" />
-          <SpeakerIcon fontSize="small" />
-          <Stack direction="row" alignItems="center">
-            <BatteryIcon sx={{ height: "16px" }} fontSize="small" />
-            <Typography align="center" variant="caption">
-              100%
-            </Typography>
-          </Stack>
-          <ArrowDownIcon />
-          <UpIcon
-            sx={{
-              opacity: anchorEl2 ? 1 : 0,
-              transition: "opacity 260ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
+        <ClickAwayListener onClickAway={() => setOption((state) => ({ ...state, three: false }))}>
+          <Stack
+            aria-controls="menu-popular-card"
+            aria-haspopup="true"
+            onClick={(e) => {
+              setAnchorEl2(e.currentTarget);
+              setOption((state) => ({ ...state, three: true }));
             }}
-            className={classes.up}
-          />
-        </Stack>
+            direction="row"
+            alignItems="center"
+            className={classes.list}
+            spacing={0.5}
+            sx={{ position: "relative", borderColor: option.three && "#E95420" }}
+          >
+            <NightModeIcon fontSize="small" />
+            <WifiIcon fontSize="small" />
+            <BlueToothIcon fontSize="small" />
+            <SpeakerIcon fontSize="small" />
+            <Stack direction="row" alignItems="center">
+              <BatteryIcon sx={{ height: "16px" }} fontSize="small" />
+              <Typography align="center" variant="body2">
+                100%
+              </Typography>
+            </Stack>
+            <ArrowDownIcon />
+            <UpIcon
+              sx={{
+                opacity: anchorEl2 ? 1 : 0,
+                transition: "opacity 260ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
+              }}
+              className={classes.up}
+            />
+          </Stack>
+        </ClickAwayListener>
         {RightMenu}
       </Toolbar>
     </AppBar>

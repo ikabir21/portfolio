@@ -71,7 +71,6 @@ const WindowBorder = (props) => {
         top: "50%"
       }}
       onDragStart={(e) => {
-        alert("hi");
         e.dataTransfer.setDragImage(img, 0, 0);
       }}
       onDrag={props.resize}

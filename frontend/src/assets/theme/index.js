@@ -32,6 +32,10 @@ const theme = createTheme({
     },
     h5: {
       color: "#444"
+    },
+    body2: {
+      fontSize: "14px",
+      lineHeight: "1.25rem"
     }
   }
 });

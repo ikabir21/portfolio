@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import SvgIcon from "@mui/material/SvgIcon";
 import React from "react";
 
