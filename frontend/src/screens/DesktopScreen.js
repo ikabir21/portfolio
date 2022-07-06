@@ -17,6 +17,7 @@ import SideBar from "../components/ToolBar/SideBar";
 import ToolBar from "../components/ToolBar";
 import AppContainer from "../components/AppContainer";
 import apps from "../config/apps";
+import { Fade } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -347,98 +348,100 @@ const DesktopScreen = () => {
   };
 
   return (
-    <Box
-      onClick={handleClick}
-      onContextMenu={handleContextMenu}
-      height="100vh"
-      sx={{
-        // backgroundImage: `url(${state?.bgImage})`,
-        position: "relative",
-        minHeight: "100%",
-        minWidth: "100%"
-      }}
-      className={classes.container}
-    >
-      <ToolBar color="#343434" />
+    <Fade in={Boolean(state?.isAuth)} {...(state?.isAuth ? { timeout: 1000 } : {})}>
       <Box
+        onClick={handleClick}
+        onContextMenu={handleContextMenu}
+        height="100vh"
         sx={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "transparent",
+          // backgroundImage: `url(${state?.bgImage})`,
           position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-end",
-          // alignContent: "flex-end",
-          flexWrap: "wrap-reverse",
-          overflow: "hidden",
-          paddingLeft: "8ch"
+          minHeight: "100%",
+          minWidth: "100%"
         }}
+        className={classes.container}
       >
-        {/* Desktop Area */}
-
-        <div
-          style={{ height: "100%", width: "100%", position: "absolute", left: 0, top: 0 }}
-          data-context="desktop-area"
-        >
-          {apps.map(
-            (app, i) =>
-              state.appState.closedWindows[app.id] !== undefined &&
-              !state.appState.closedWindows?.[app.id] && (
-                <AppContainer
-                  key={i}
-                  id={app.id}
-                  title={app.title}
-                  screen={app.screen}
-                  minimizeWindow={minimizeWindow}
-                  hideSideBar={hideSideBar}
-                  closeWindow={closeApp}
-                  focusApp={focusApp}
-                  openApp={openApp}
-                  minimized={state.appState.minimizedWindows[app.id]}
-                />
-              )
-          )}
-        </div>
-
-        {/* Background Image Here */}
-
+        <ToolBar color="#343434" />
         <Box
           sx={{
-            backgroundImage: `url(${state?.bgImage})`,
-            position: "absolute",
-            height: "100%",
             width: "100%",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPositionX: "center",
-            zIndex: -10,
-            top: 0,
-            right: 0
+            height: "100%",
+            backgroundColor: "transparent",
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-end",
+            // alignContent: "flex-end",
+            flexWrap: "wrap-reverse",
+            overflow: "hidden",
+            paddingLeft: "8ch"
           }}
-        />
+        >
+          {/* Desktop Area */}
 
-        <SideBar
-          hideSideBar={hideSideBar}
-          isSideBarHidden={state.appState.hideSideBar}
-          openApp={openApp}
-        />
-        <Box sx={{ width: ".25rem", height: "100%", position: "absolute", left: 0, top: 0 }} />
-        {state.apps.map(
-          (app, i) =>
-            app.isDesktopShortcut && (
-              <Box key={i} onDoubleClick={() => openApp(app.id)} className={classes.app}>
-                {app.icon}
-                <Typography variant="body2" align="center">
-                  {app.title}
-                </Typography>
-              </Box>
-            )
-        )}
+          <div
+            style={{ height: "100%", width: "100%", position: "absolute", left: 0, top: 0 }}
+            data-context="desktop-area"
+          >
+            {apps.map(
+              (app, i) =>
+                state.appState.closedWindows[app.id] !== undefined &&
+                !state.appState.closedWindows?.[app.id] && (
+                  <AppContainer
+                    key={i}
+                    id={app.id}
+                    title={app.title}
+                    screen={app.screen}
+                    minimizeWindow={minimizeWindow}
+                    hideSideBar={hideSideBar}
+                    closeWindow={closeApp}
+                    focusApp={focusApp}
+                    openApp={openApp}
+                    minimized={state.appState.minimizedWindows[app.id]}
+                  />
+                )
+            )}
+          </div>
+
+          {/* Background Image Here */}
+
+          <Box
+            sx={{
+              backgroundImage: `url(${state?.bgImage})`,
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPositionX: "center",
+              zIndex: -10,
+              top: 0,
+              right: 0
+            }}
+          />
+
+          <SideBar
+            hideSideBar={hideSideBar}
+            isSideBarHidden={state.appState.hideSideBar}
+            openApp={openApp}
+          />
+          <Box sx={{ width: ".25rem", height: "100%", position: "absolute", left: 0, top: 0 }} />
+          {state.apps.map(
+            (app, i) =>
+              app.isDesktopShortcut && (
+                <Box key={i} onDoubleClick={() => openApp(app.id)} className={classes.app}>
+                  {app.icon}
+                  <Typography variant="body2" align="center">
+                    {app.title}
+                  </Typography>
+                </Box>
+              )
+          )}
+        </Box>
+        {showContextMenu && <ContextMenu coordinate={coordinate} />}
       </Box>
-      {showContextMenu && <ContextMenu coordinate={coordinate} />}
-    </Box>
+    </Fade>
   );
 };
 

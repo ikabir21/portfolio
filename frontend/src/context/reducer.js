@@ -25,6 +25,7 @@ const reducer = (state, action) => {
     case AUTH:
       localStorage.setItem("isAuth", true);
       return {
+        ...state,
         isAuth: action.payload
       };
     case SET_BG:

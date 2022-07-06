@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import PropTypes from "prop-types";
 
 // @mui/material imports
@@ -12,6 +12,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Fade from "@mui/material/Fade";
 
 // @mui/styles imports
 
@@ -69,9 +70,10 @@ const CutsomUser = withStyles({
     color: "inherit !important",
     align: "left",
     padding: "0.5ch 1ch",
-    "&:hover": {
-      backgroundColor: "rgba(255, 255, 255, 0.04) !important"
-    }
+    backgroundColor: "rgba(255, 255, 255, 0.04) !important"
+    // "&:hover": {
+    //   backgroundColor: "rgba(255, 255, 255, 0.04) !important"
+    // }
   },
   user: {
     width: "48px !important",
@@ -79,10 +81,12 @@ const CutsomUser = withStyles({
     backgroundColor: "rgba(255, 255, 255, 0.05) !important"
   }
 })((props) => {
-  const { children, classes } = props;
+  const { children, classes, forwardedref } = props;
+  console.log(props);
   return (
     <Button
       {...props}
+      ref={forwardedref}
       className={classes.btn}
       startIcon={
         <Avatar className={classes.user}>
@@ -103,16 +107,17 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
   console.log(state, actions);
 
   const [isPassword, setIsPassword] = useState(true);
-  const [password, setPassword] = useState("sudo_login");
+  const [password, setPassword] = useState("password");
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
   const classes = useStyles();
+  const authButton = useRef(null);
 
   useEffect(() => {
     if (isLoading) {
       setTimeout(() => {
         setLoading(false);
-        if (password === "sudo_login") {
+        if (password === "password") {
           login({ isAuth: true });
         } else setError(true);
       }, 300);
@@ -129,70 +134,81 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(!isLoading);
+    setTimeout(() => {
+      setLoading(!isLoading);
+    });
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      authButton.current.click();
+    }, 2000);
+  }, []);
+
   return (
-    <Stack spacing={1} alignItems="center">
-      <Avatar sx={{ width: 72, height: 72, background: "rgba(255, 255, 255, 0.05)" }}>
-        <UserIcon sx={{ width: "48px", height: "48px" }} />
-      </Avatar>
-      <Typography>{isSaved && "Ichan Kabir"}</Typography>
-      <Stack alignItems="center" spacing={1} direction="row">
-        <IconButton
-          onClick={() => {
-            setShowLogin(!showLogin);
-            setIsSaved(true);
-          }}
-          sx={{
-            background: "#eee",
-            p: 0.3,
-            "&:hover": { background: "#eee" }
-          }}
-          size="small"
-        >
-          <BackIcon sx={{ fontSize: "1.4rem" }} />
-        </IconButton>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            size="small"
-            className={classes.textField}
-            placeholder="Password"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setIsPassword(!isPassword)} size="small">
-                    {isPassword ? (
-                      <EyeOffIcon sx={{ fontSize: "18px" }} />
-                    ) : (
-                      <EyeOnIcon sx={{ fontSize: "18px" }} />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-            type={isPassword ? "password" : "text"}
-            helperText={isError && "Sorry, that didn't work. Please try again."}
-          />
-        </form>
-        {isLoading ? (
-          <IconButton disableRipple sx={{ backgroundColor: "#4F194D", marginLeft: "4px" }}>
-            <Spinner sx={{ fontSize: "1rem", color: "#eee" }} />
-          </IconButton>
-        ) : (
+    <Fade in={showLogin} {...(showLogin ? { timeout: 1000 } : {})}>
+      <Stack spacing={1} alignItems="center">
+        <Avatar sx={{ width: 72, height: 72, background: "rgba(255, 255, 255, 0.05)" }}>
+          <UserIcon sx={{ width: "48px", height: "48px" }} />
+        </Avatar>
+        <Typography>{isSaved && "Ichan Kabir"}</Typography>
+        <Stack alignItems="center" spacing={1} direction="row">
           <IconButton
-            type="submit"
-            disableRipple
-            sx={{ backgroundColor: "rgba(255, 255, 255, 0.04)", marginLeft: "4px" }}
-            onClick={() => setLoading(!isLoading)}
+            onClick={() => {
+              setShowLogin(!showLogin);
+              setIsSaved(true);
+            }}
+            sx={{
+              background: "#eee",
+              p: 0.3,
+              "&:hover": { background: "#eee" }
+            }}
+            size="small"
           >
-            <GoIcon sx={{ fontSize: "1rem", color: "#eee" }} />
+            <BackIcon sx={{ fontSize: "1.4rem" }} />
           </IconButton>
-        )}
+          <form onSubmit={handleSubmit}>
+            <TextField
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              size="small"
+              className={classes.textField}
+              placeholder="Password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setIsPassword(!isPassword)} size="small">
+                      {isPassword ? (
+                        <EyeOffIcon sx={{ fontSize: "18px" }} />
+                      ) : (
+                        <EyeOnIcon sx={{ fontSize: "18px" }} />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+              type={isPassword ? "password" : "text"}
+              helperText={isError && "Sorry, that didn't work. Please try again."}
+            />
+          </form>
+          {isLoading ? (
+            <IconButton disableRipple sx={{ backgroundColor: "#4F194D", marginLeft: "4px" }}>
+              <Spinner sx={{ fontSize: "1rem", color: "#eee" }} />
+            </IconButton>
+          ) : (
+            <IconButton
+              ref={authButton}
+              type="submit"
+              disableRipple
+              sx={{ backgroundColor: "rgba(255, 255, 255, 0.04)", marginLeft: "4px" }}
+              onClick={() => setLoading(!isLoading)}
+            >
+              <GoIcon sx={{ fontSize: "1rem", color: "#eee" }} />
+            </IconButton>
+          )}
+        </Stack>
       </Stack>
-    </Stack>
+    </Fade>
   );
 };
 
@@ -206,6 +222,13 @@ Login.propTypes = {
 const LockScreen = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
+  const showLoginRef = useRef(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      showLoginRef.current.click();
+    }, 1000);
+  }, []);
 
   const handleShowLogin = () => setShowLogin((state) => !state);
 
@@ -228,7 +251,7 @@ const LockScreen = () => {
         {!showLogin ? (
           <>
             <Box mb={1} align="start">
-              <CutsomUser username="Ichan Kabir" onClick={handleShowLogin} disableRipple>
+              <CutsomUser forwardedref={showLoginRef} onClick={handleShowLogin} disableRipple>
                 Ichan Kabir
               </CutsomUser>
             </Box>
