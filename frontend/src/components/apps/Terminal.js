@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import styled from "@mui/styles/styled";
 import giphy from "../../assets/images/giphy.gif";
+import { ClickAwayListener } from "@mui/material";
 
 const StyledInput = styled("input")(() => ({
   position: "absolute",
@@ -29,11 +30,12 @@ const Terminal = ({ openApp }) => {
     prevCommands: [],
     commandsInd: -1,
     childDirs: {
-      home: ["projects", "resume.pdf", "skills", "languages"],
-      skills: ["React.js", "Node.js", "Express.js", "SQL", "MongoDB", "Django", "PostgreSQL"],
-      projects: [
-        "ichankabir.me",
-        "Fabble",
+      home: ["About", "Resume.pdf", "Firefox", "Trash"],
+      About: ["Skills", "Projects"],
+      Skills: ["React.js", "Node.js", "Express.js", "SQL", "MongoDB", "Django", "PostgreSQL"],
+      Projects: [
+        "Portfolio",
+        "Fabbl",
         "Asynchronous Youtube Search",
         "Virtual Queue",
         "Real Estate App",
@@ -42,13 +44,32 @@ const Terminal = ({ openApp }) => {
       languages: ["Javascript", "Java", "Python"]
     }
   });
+  const [curId, setCurId] = useState(1);
 
   useEffect(() => {
     initializeTerminal();
   }, []);
 
   useEffect(() => {
-    // clearInterval(obj.cursor);
+    getCursor(curId);
+  }, [curId]);
+
+  const getCursor = (id) => {
+    clearInterval(obj.cursor);
+    $(`input#terminal-input-${id}`).trigger("focus");
+    $(`input#terminal-input-${id}`).on("input", function () {
+      $(`#cmd span#show-${id}`).text($(this).val());
+    });
+    obj.cursor = window.setInterval(function () {
+      if ($(`#cursor-${id}`).css("visibility") === "visible") {
+        $(`#cursor-${id}`).css({ visibility: "hidden" });
+      } else {
+        $(`#cursor-${id}`).css({ visibility: "visible" });
+      }
+    }, 500);
+  };
+
+  useEffect(() => {
     startCursor(obj.rows - 2);
     return () => {
       clearInterval(obj.cursor);
@@ -64,6 +85,7 @@ const Terminal = ({ openApp }) => {
   const addNewRow = () => {
     const terminal = obj.terminal;
     terminal.push(terminalRow(obj.rows));
+    setCurId(obj.rows);
     setObj((state) => ({ ...state, terminal }));
     obj.rows += 2;
   };
@@ -71,7 +93,7 @@ const Terminal = ({ openApp }) => {
   const terminalRow = (id) => {
     return (
       <React.Fragment key={id}>
-        <Box sx={{ width: "100%", height: "1.25rem", display: "flex" }}>
+        <Box sx={{ width: "100%", height: "1.25rem", display: "flex", px: 0.2 }}>
           <Stack direction="row">
             <Typography sx={{ color: "rgb(78, 158, 6)" }}>ubuntu@ubuntu2004</Typography>
             <Typography sx={{ color: "#fff", fontWeight: 500, margin: "0 1px" }}>:</Typography>
@@ -308,19 +330,28 @@ const Terminal = ({ openApp }) => {
   };
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-        width: "100%",
-        backgroundColor: "rgb(44, 0, 30)",
-        fontSize: "0.875rem",
-        lineHeight: "1.25rem",
-        cursor: "text"
+    <ClickAwayListener
+      onClickAway={() => {
+        clearInterval(obj.cursor);
       }}
-      id="terminalBody"
     >
-      {obj.terminal}
-    </Box>
+      <Box
+        sx={{
+          height: "100%",
+          width: "100%",
+          backgroundColor: "rgb(44, 0, 30)",
+          fontSize: "0.875rem",
+          lineHeight: "1.25rem",
+          cursor: "text"
+        }}
+        onClick={() => {
+          getCursor(curId);
+        }}
+        id="terminalBody"
+      >
+        {obj.terminal}
+      </Box>
+    </ClickAwayListener>
   );
 };
 

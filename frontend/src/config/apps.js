@@ -22,7 +22,7 @@ const apps = [
   },
   {
     id: "me",
-    title: "About Me",
+    title: "About",
     icon: <HomeIcon />,
     isDisabled: false,
     isFavourite: true,
@@ -44,7 +44,7 @@ const apps = [
     icon: <SpotifyIcon />,
     isDisabled: false,
     isFavourite: true,
-    isDesktopShortcut: true,
+    isDesktopShortcut: false,
     screen: <Spotify />
   },
   {
@@ -83,51 +83,6 @@ const apps = [
     isDesktopShortcut: false,
     screen: <Discord />
   }
-  // {
-  //   id: "vscode",
-  //   title: "Code",
-  //   icon: <VsCodeIcon />,
-  //   isDisabled: false,
-  //   isFavourite: true,
-  //   isDesktopShortcut: true,
-  //   screen: displayVsCode
-  // },
-  // {
-  //   id: "spotify",
-  //   title: "Spotify",
-  //   icon: <SpotifyIcon />,
-  //   isDisabled: false,
-  //   isFavourite: true,
-  //   isDesktopShortcut: true,
-  //   screen: displaySpotify
-  // },
-  // {
-  //   id: "trash",
-  //   title: "Trash",
-  //   icon: <TrashIcon />,
-  //   isDisabled: false,
-  //   isFavourite: false,
-  //   isDesktopShortcut: true,
-  //   screen: displaySpotify
-  // },
-  // {
-  //   id: "spotify",
-  //   title: "Spotify",
-  //   icon: <SpotifyIcon />,
-  //   isDisabled: false,
-  //   isFavourite: true,
-  //   isDesktopShortcut: true,
-  //   screen: displaySpotify
-  // },
-  // {
-  //   id: "trash",
-  //   title: "Trash",
-  //   icon: <TrashIcon />,
-  //   isDisabled: false,
-  //   isFavourite: false,
-  //   isDesktopShortcut: true,
-  //   screen: displaySpotify
-  // }
 ];
 
 export default apps;

@@ -39,6 +39,9 @@ const App = () => {
       localStorage.removeItem("isLock");
       localStorage.removeItem("isShutDown");
       localStorage.removeItem("newFolders");
+      localStorage.removeItem("freqApps");
+      localStorage.removeItem("brightness");
+      localStorage.removeItem("sound");
       actions.login(false);
       actions.setShutDown(true);
       actions.setLock(true);
