@@ -21,8 +21,8 @@ const apps = [
     screen: <Firefox />
   },
   {
-    id: "ikabir",
-    title: "ikabir",
+    id: "me",
+    title: "About Me",
     icon: <HomeIcon />,
     isDisabled: false,
     isFavourite: true,

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import makeStyles from "@mui/styles/makeStyles";
 
@@ -8,7 +9,6 @@ const GAP2 = GAP * 2;
 
 const useStyles = makeStyles({
   root: {
-    background: "#0c1920",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -71,11 +71,11 @@ const useStyles = makeStyles({
   }
 });
 
-const Loader = () => {
+const Loader = ({ bgColor = "#0c1920" }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ background: bgColor }}>
       <div className={classes.wrapper}>
         <svg viewBox="0 0 200 180">
           <path d="M11.4 90.3q-1.4-2.4 0-4.7l42.3-73.3q1.3-2.3 4-2.3h84.6q2.7 0 4 2.3l42.4 73.3q1.3 2.3 0 4.7l-42.3 73.2q-1.4 2.4-4.1 2.4H57.7q-2.7 0-4-2.4z" />

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 40,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     boxShadow: 3,
-    paddingTop: theme.spacing(1)
+    paddingTop: theme.spacing(0.5)
   },
   listItem: {
     outline: "2px solid transparent",

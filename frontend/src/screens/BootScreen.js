@@ -70,10 +70,10 @@ const CutsomUser = withStyles({
     color: "inherit !important",
     align: "left",
     padding: "0.5ch 1ch",
-    backgroundColor: "rgba(255, 255, 255, 0.04) !important"
-    // "&:hover": {
-    //   backgroundColor: "rgba(255, 255, 255, 0.04) !important"
-    // }
+    // backgroundColor: "rgba(255, 255, 255, 0.04) !important"
+    "&:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.04) !important"
+    }
   },
   user: {
     width: "48px !important",
@@ -82,7 +82,6 @@ const CutsomUser = withStyles({
   }
 })((props) => {
   const { children, classes, forwardedref } = props;
-  console.log(props);
   return (
     <Button
       {...props}
@@ -104,7 +103,6 @@ const CutsomUser = withStyles({
 const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
   const { state, actions } = useContext(AppContext);
   const { login } = actions;
-  console.log(state, actions);
 
   const [isPassword, setIsPassword] = useState(true);
   const [password, setPassword] = useState("password");
@@ -118,7 +116,7 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
       setTimeout(() => {
         setLoading(false);
         if (password === "password") {
-          login({ isAuth: true });
+          login(true);
         } else setError(true);
       }, 300);
     }
@@ -136,14 +134,14 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
     e.preventDefault();
     setTimeout(() => {
       setLoading(!isLoading);
-    });
+    }, 700);
   };
 
   useEffect(() => {
     setTimeout(() => {
-      authButton.current.click();
-    }, 2000);
-  }, []);
+      if (!state.isLock && !state.isShutDown) authButton.current.click();
+    }, 1000);
+  }, [state.isLock, state.isShutDown]);
 
   return (
     <Fade in={showLogin} {...(showLogin ? { timeout: 1000 } : {})}>
@@ -177,7 +175,11 @@ const Login = ({ isSaved, setIsSaved, showLogin, setShowLogin }) => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => setIsPassword(!isPassword)} size="small">
+                    <IconButton
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setIsPassword(!isPassword)}
+                      size="small"
+                    >
                       {isPassword ? (
                         <EyeOffIcon sx={{ fontSize: "18px" }} />
                       ) : (
@@ -219,16 +221,17 @@ Login.propTypes = {
   setIsSaved: PropTypes.func.isRequired
 };
 
-const LockScreen = () => {
+const BootScreen = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
   const showLoginRef = useRef(null);
+  const { state, actions } = useContext(AppContext);
 
   useEffect(() => {
     setTimeout(() => {
-      showLoginRef.current.click();
-    }, 1000);
-  }, []);
+      if (!state.isLock && !state.isShutDown) showLoginRef.current.click();
+    }, 500);
+  }, [state.isLock, state.isShutDown]);
 
   const handleShowLogin = () => setShowLogin((state) => !state);
 
@@ -301,4 +304,4 @@ const LockScreen = () => {
   );
 };
 
-export default LockScreen;
+export default BootScreen;

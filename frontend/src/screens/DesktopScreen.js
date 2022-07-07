@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useContext, useEffect } from "react";
 
 // @mui/material imports
@@ -74,10 +75,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const DesktopScreen = () => {
+const DesktopScreen = (props) => {
   const { state, actions } = useContext(AppContext);
 
   const [showContextMenu, setContextMenu] = useState(false);
+  const [isFullScreen, setFullScreen] = useState(false);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const classes = useStyles();
 
@@ -366,7 +368,12 @@ const DesktopScreen = () => {
         }}
         className={classes.container}
       >
-        <ToolBar />
+        <ToolBar
+          lock={props.lock}
+          shutDown={props.shutDown}
+          logout={props.logout}
+          reset={props.reset}
+        />
         <Box
           sx={{
             width: "100%",
@@ -380,8 +387,7 @@ const DesktopScreen = () => {
             // alignContent: "flex-end",
             flexWrap: "wrap-reverse",
             overflow: "hidden",
-            pl: "7ch",
-            pt: "1ch"
+            pl: "7ch"
           }}
         >
           {/* Desktop Area */}
@@ -450,7 +456,14 @@ const DesktopScreen = () => {
             <ShowAllApps apps={apps} recentApps={state.alreadyOpenedApps} openApp={openApp} />
           )}
         </Box>
-        {showContextMenu && <ContextMenu coordinate={coordinate} />}
+        {showContextMenu && (
+          <ContextMenu
+            isFullScreen={isFullScreen}
+            setFullScreen={setFullScreen}
+            coordinate={coordinate}
+            openApp={openApp}
+          />
+        )}
       </Box>
     </Fade>
   );

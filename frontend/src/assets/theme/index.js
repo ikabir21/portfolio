@@ -36,6 +36,10 @@ const theme = createTheme({
     body2: {
       fontSize: "14px",
       lineHeight: "1.25rem"
+    },
+    caption: {
+      fontSize: "13px",
+      fontWeight: 400
     }
   }
 });
