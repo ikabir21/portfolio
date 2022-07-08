@@ -9,6 +9,9 @@ import Postman from "../components/apps/Postman";
 import Discord from "../components/apps/Discord";
 import Spotify from "../components/apps/Spotify";
 import Terminal from "../components/apps/Terminal";
+import About from "../components/apps/About";
+import DocumentIcon from "../assets/svg/DocumentIcon";
+import ResumeViewer from "../components/apps/ResumeViewer";
 
 const apps = [
   {
@@ -22,12 +25,12 @@ const apps = [
   },
   {
     id: "me",
-    title: "About",
+    title: "About me",
     icon: <HomeIcon />,
     isDisabled: false,
     isFavourite: true,
     isDesktopShortcut: true,
-    screen: <VsCode />
+    screen: <About />
   },
   {
     id: "vscode",
@@ -82,6 +85,15 @@ const apps = [
     isFavourite: true,
     isDesktopShortcut: false,
     screen: <Discord />
+  },
+  {
+    id: "resume",
+    title: "Resume.pdf",
+    icon: <DocumentIcon />,
+    isDisabled: false,
+    isFavourite: false,
+    isDesktopShortcut: true,
+    screen: <ResumeViewer />
   }
 ];
 

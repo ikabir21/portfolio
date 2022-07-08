@@ -30,8 +30,9 @@ const Terminal = ({ openApp }) => {
     prevCommands: [],
     commandsInd: -1,
     childDirs: {
-      home: ["About", "Resume.pdf", "Firefox", "Trash"],
-      About: ["Skills", "Projects"],
+      home: ["Desktop"],
+      Desktop: ["About", "Firefox", "Resume.pdf", "Trash"],
+      About: ["Skills", "Education", "Projects", "Skills", "Resume.pdf"],
       Skills: ["React.js", "Node.js", "Express.js", "SQL", "MongoDB", "Django", "PostgreSQL"],
       Projects: [
         "Portfolio",
@@ -308,6 +309,9 @@ const Terminal = ({ openApp }) => {
       case "settings":
         openApp("settings");
         break;
+      case "resume":
+        openApp("resume");
+        break;
       case "clear":
         initializeTerminal();
         return;
@@ -317,13 +321,17 @@ const Terminal = ({ openApp }) => {
       case "sudo":
         result = `<img src=${giphy} />`;
         break;
+      case "help":
+        result =
+          "Available Commands: [ cd, ls, pwd, clear, exit, spotify, code, settings, about, firefox, chrome, resume, sudo, help ]";
+        break;
       default:
         result =
           "Command '" +
           main +
           "' not found. " +
           "\n" +
-          "Available Commands: [ cd, ls, pwd, clear, exit, spotify, code, settings, about, firefox, chrome, sudo ]";
+          "Available Commands: [ cd, ls, pwd, clear, exit, spotify, code, settings, about, firefox, chrome, resume, sudo, help ]";
     }
     document.getElementById(`row-result-${rowId}`).innerHTML = result;
     addNewRow();

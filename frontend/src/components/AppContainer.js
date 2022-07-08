@@ -10,7 +10,7 @@ import MaximizeIcon1 from "../assets/svg/MaximizeIcon1";
 import MaximizeIcon2 from "../assets/svg/MaximizeIcon2";
 import CloseIcon from "../assets/svg/CloseIcon";
 import { displayTerminal } from "./apps/Terminal";
-import { Grow } from "@mui/material";
+import { Grow, useMediaQuery } from "@mui/material";
 
 const useStyles = makeStyles(() => ({
   windowTopBarContainer: {
@@ -147,8 +147,8 @@ const WindowBody = (props) => {
 
 const AppContainer = (props) => {
   const [obj, setObj] = useState({
-    x: 200,
-    y: 50,
+    x: 60,
+    y: 10,
     isDrag: false,
     width: 60,
     height: 85,
@@ -161,6 +161,7 @@ const AppContainer = (props) => {
   });
 
   const { state, actions } = useContext(AppContext);
+  const matchesXs = useMediaQuery("(min-width:600px)");
 
   useEffect(() => {
     setDefaultWindowDimenstion();
@@ -289,34 +290,34 @@ const AppContainer = (props) => {
         bottom: obj?.parentSize?.height
       }}
     >
-      <Grow in={!!props.openApp}>
-        <div
-          style={{
-            width: `${obj.width}%`,
-            height: `${obj.height}%`,
-            backgroundColor: "#333",
-            position: "absolute",
-            zIndex: state.appState.focusedWindows[props.id] ? 1000 : 30,
-            borderTopRightRadius: "1ch",
-            borderTopLeftRadius: "1ch",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-            cursor: props?.isDrag ? "move !important" : "default"
-          }}
+      {/* <Grow in={true}> */}
+      <div
+        style={{
+          width: `${obj.width}%`,
+          height: `${obj.height}%`,
+          backgroundColor: "#333",
+          position: "absolute",
+          zIndex: state.appState.focusedWindows[props.id] ? 1000 : 30,
+          borderTopRightRadius: "1ch",
+          borderTopLeftRadius: "1ch",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          cursor: props?.isDrag ? "move !important" : "default"
+        }}
+        id={props.id}
+      >
+        <WindowBorder x={false} resize={resizeY} />
+        <WindowBorder x={true} resize={resizeX} />
+        <WindowTopBar isDrag={obj.isDrag} title={props.title} />
+        <WindowEditButtons
+          minimizeWindow={minimizeWindow}
+          maximizeWindow={maximizeWindow}
+          isMaximised={obj.maximized}
+          closeWindow={closeWindow}
           id={props.id}
-        >
-          <WindowBorder x={false} resize={resizeY} />
-          <WindowBorder x={true} resize={resizeX} />
-          <WindowTopBar isDrag={obj.isDrag} title={props.title} />
-          <WindowEditButtons
-            minimizeWindow={minimizeWindow}
-            maximizeWindow={maximizeWindow}
-            isMaximised={obj.maximized}
-            closeWindow={closeWindow}
-            id={props.id}
-          />
-          {/* {props.id === "settings" ? (
+        />
+        {/* {props.id === "settings" ? (
           <Settings
             changeBackgroundImage={props.changeBackgroundImage}
             currBgImgName={props.bg_image_name}
@@ -329,13 +330,13 @@ const AppContainer = (props) => {
             openApp={props.openApp}
           />
         )} */}
-          <WindowBody
-            isOpenApp={props.id === "terminal"}
-            openApp={props.openApp}
-            screen={props.screen}
-          />
-        </div>
-      </Grow>
+        <WindowBody
+          isOpenApp={props.id === "terminal"}
+          openApp={props.openApp}
+          screen={props.screen}
+        />
+      </div>
+      {/* </Grow> */}
     </Draggable>
   );
 };

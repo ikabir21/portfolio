@@ -8,7 +8,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { AppsIcon } from "../../assets/svg/apps";
 import DotIcon from "../../assets/svg/DotIcon";
 import { AppContext } from "../../context";
-import { Typography } from "@mui/material";
+import { Slide, Typography } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   sidebarBox: {
@@ -49,102 +49,104 @@ const SideBar = (props) => {
   const [showTitle, setShowTitle] = useState({});
 
   return (
-    <Box
-      className={classes.sidebarBox}
-      id="sidebar"
-      sx={{ transform: props.isSideBarHidden && "translateX(-100%)" }}
-    >
-      {state.apps.map(
-        (app, i) =>
-          app.isFavourite && (
-            <Box
-              onClick={() => props.openApp(app.id)}
-              key={i}
-              disablePadding
-              className={classes.listItem}
-              id={"sidebar-" + app.id}
-              sx={{
-                backgroundColor:
-                  state.appState.closedWindows?.[app.id] !== undefined &&
-                  !state.appState.closedWindows?.[app.id] &&
-                  "rgba(255, 255, 255, 0.1)"
-              }}
-              onMouseEnter={() => setShowTitle({ [app.title]: true })}
-              onMouseLeave={() => setShowTitle({ [app.title]: false })}
-            >
+    <Slide direction="right" in={!state.appState.hideSideBar}>
+      <Box
+        className={classes.sidebarBox}
+        id="sidebar"
+        sx={{ transform: props.isSideBarHidden && "translateX(-100%)" }}
+      >
+        {state.apps.map(
+          (app, i) =>
+            app.isFavourite && (
               <Box
+                onClick={() => props.openApp(app.id)}
+                key={i}
+                disablePadding
+                className={classes.listItem}
+                id={"sidebar-" + app.id}
                 sx={{
-                  width: "32px",
-                  height: "32px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
+                  backgroundColor:
+                    state.appState.closedWindows?.[app.id] !== undefined &&
+                    !state.appState.closedWindows?.[app.id] &&
+                    "rgba(255, 255, 255, 0.1)"
                 }}
+                onMouseEnter={() => setShowTitle({ [app.title]: true })}
+                onMouseLeave={() => setShowTitle({ [app.title]: false })}
               >
-                {state.appState.closedWindows?.[app.id] !== undefined &&
-                  !state.appState.closedWindows?.[app.id] && (
-                    <DotIcon style={{ marginLeft: "7px" }} />
-                  )}
-                {app.icon}
+                <Box
+                  sx={{
+                    width: "32px",
+                    height: "32px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  {state.appState.closedWindows?.[app.id] !== undefined &&
+                    !state.appState.closedWindows?.[app.id] && (
+                      <DotIcon style={{ marginLeft: "2px" }} />
+                    )}
+                  {app.icon}
+                </Box>
+                <Typography
+                  sx={{
+                    position: "absolute",
+                    p: "2px 6px",
+                    color: "rgba(246, 246, 245, 0.9)",
+                    background: "#111",
+                    border: "1px solid rgba(156,163,175, 0.4)",
+                    left: "100%",
+                    borderRadius: "6px",
+                    width: "max-content",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    ml: "1.5ch",
+                    visibility: showTitle[app.title] ? "visible" : "hidden"
+                  }}
+                  variant="body2"
+                >
+                  {app.title}
+                </Typography>
               </Box>
-              <Typography
-                sx={{
-                  position: "absolute",
-                  p: "2px 6px",
-                  color: "rgba(246, 246, 245, 0.9)",
-                  background: "#111",
-                  border: "1px solid rgba(156,163,175, 0.4)",
-                  left: "100%",
-                  borderRadius: "6px",
-                  width: "max-content",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  ml: "1.5ch",
-                  visibility: showTitle[app.title] ? "visible" : "hidden"
-                }}
-                variant="body2"
-              >
-                {app.title}
-              </Typography>
-            </Box>
-          )
-      )}
-      <div style={{ flexGrow: 1 }} />
-      <Box disablePadding className={classes.listItem} onClick={props.showAllApps}>
-        <Box
-          sx={{
-            width: "32px",
-            height: "32px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-          onMouseEnter={() => setShowTitle({ ["allApps"]: true })}
-          onMouseLeave={() => setShowTitle({ ["allApps"]: false })}
-        >
-          <AppsIcon />
+            )
+        )}
+        <div style={{ flexGrow: 1 }} />
+        <Box disablePadding className={classes.listItem} onClick={props.showAllApps}>
+          <Box
+            sx={{
+              width: "32px",
+              height: "32px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+            onMouseEnter={() => setShowTitle({ ["allApps"]: true })}
+            onMouseLeave={() => setShowTitle({ ["allApps"]: false })}
+          >
+            <AppsIcon />
+          </Box>
+          <Typography
+            sx={{
+              position: "absolute",
+              p: "2px 6px",
+              color: "rgba(246, 246, 245, 0.9)",
+              background: "#111",
+              border: "1px solid rgba(156,163,175, 0.4)",
+              left: "100%",
+              borderRadius: "6px",
+              width: "max-content",
+              top: "50%",
+              transform: "translateY(-50%)",
+              ml: "1.5ch",
+              visibility: showTitle["allApps"] ? "visible" : "hidden"
+            }}
+            variant="body2"
+          >
+            {"Show Applications"}
+          </Typography>
         </Box>
-        <Typography
-          sx={{
-            position: "absolute",
-            p: "2px 6px",
-            color: "rgba(246, 246, 245, 0.9)",
-            background: "#111",
-            border: "1px solid rgba(156,163,175, 0.4)",
-            left: "100%",
-            borderRadius: "6px",
-            width: "max-content",
-            top: "50%",
-            transform: "translateY(-50%)",
-            ml: "1.5ch",
-            visibility: showTitle["allApps"] ? "visible" : "hidden"
-          }}
-          variant="body2"
-        >
-          {"Show Applications"}
-        </Typography>
       </Box>
-    </Box>
+    </Slide>
   );
 };
 
