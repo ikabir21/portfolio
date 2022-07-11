@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/portfolio/static/css/main.9a48d959.css",
+    "main.js": "/portfolio/static/js/main.bf28527e.js",
+    "static/js/301.58fddc67.chunk.js": "/portfolio/static/js/301.58fddc67.chunk.js",
+    "static/js/566.7dfa1672.chunk.js": "/portfolio/static/js/566.7dfa1672.chunk.js",
+    "static/js/378.58ea68b8.chunk.js": "/portfolio/static/js/378.58ea68b8.chunk.js",
+    "static/js/637.28cb7815.chunk.js": "/portfolio/static/js/637.28cb7815.chunk.js",
+    "static/js/246.cbfca663.chunk.js": "/portfolio/static/js/246.cbfca663.chunk.js",
+    "static/js/406.e3c30a3b.chunk.js": "/portfolio/static/js/406.e3c30a3b.chunk.js",
+    "static/media/ubuntu-20-04-2.webp": "/portfolio/static/media/ubuntu-20-04-2.a845a701b34e95199497.webp",
+    "static/media/giphy.gif": "/portfolio/static/media/giphy.4f1f6fc52a49bc0f39c0.gif",
+    "static/media/Skills.md": "/portfolio/static/media/Skills.61fa21552551f787ac1d.md",
+    "static/media/About.md": "/portfolio/static/media/About.49570fea270959931705.md",
+    "index.html": "/portfolio/index.html",
+    "static/media/Education.md": "/portfolio/static/media/Education.7516d3148920cbe93633.md",
+    "main.9a48d959.css.map": "/portfolio/static/css/main.9a48d959.css.map",
+    "main.bf28527e.js.map": "/portfolio/static/js/main.bf28527e.js.map",
+    "301.58fddc67.chunk.js.map": "/portfolio/static/js/301.58fddc67.chunk.js.map",
+    "566.7dfa1672.chunk.js.map": "/portfolio/static/js/566.7dfa1672.chunk.js.map",
+    "378.58ea68b8.chunk.js.map": "/portfolio/static/js/378.58ea68b8.chunk.js.map",
+    "637.28cb7815.chunk.js.map": "/portfolio/static/js/637.28cb7815.chunk.js.map",
+    "246.cbfca663.chunk.js.map": "/portfolio/static/js/246.cbfca663.chunk.js.map",
+    "406.e3c30a3b.chunk.js.map": "/portfolio/static/js/406.e3c30a3b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9a48d959.css",
+    "static/js/main.bf28527e.js"
+  ]
+}
