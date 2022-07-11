@@ -53,6 +53,8 @@
     "eslint-config-react-app": "^7.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.3",
+    "gh": "^2.8.9",
+    "pages": "^0.0.16",
     "prettier": "^2.5.1"
   }
 }
