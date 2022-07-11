@@ -16,7 +16,6 @@ import ProjectsIcon from "../../assets/svg/ProjectsIcon";
 import ResumeIcon from "../../assets/svg/ResumeIcon";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark as CodeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
-import resume from "../../assets/documents/Ichan_Kabir_Resume.pdf";
 
 const CodeBlock = ({ className, children }) => {
   let lang = "text"; // default monospaced text
@@ -238,7 +237,7 @@ const Resume = () => {
   return (
     <iframe
       style={{ width: "100%", height: "100%" }}
-      src={resume}
+      src="/Ichan_Kabir_Resume.pdf"
       title="Ichan Kabir Resume"
       frameBorder="0"
     />
