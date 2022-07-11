@@ -4,7 +4,8 @@
 
   [![Linkedin: ikabir](https://img.shields.io/badge/-ikabir-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/ikabir/)](https://www.linkedin.com/in/ikabir/)
   [![GitHub ikabir](https://img.shields.io/badge/-ikabir-white?style=flat-square&logo=Github&logoColor=black&link=https://www.github.com/ikabir21)](https://www.github.com/ikabir21)
-  [![website](https://img.shields.io/badge/Website-46a2f1.svg?&style=flat-square&logo=Google-Chrome&logoColor=white&link=https://ichankabir.me/)](https://ichankabir.me/)
+[![website](https://img.shields.io/badge/Website-46a2f1.svg?&style=flat-square&logo=Google-Chrome&logoColor=white&link=https://ichankabir.tech/)](https://ichankabir.tech/)
+
   [![Gmail](https://img.shields.io/badge/-Gmail-fafafa?style=flat-square&logo=Gmail&logoColor=orange)](https://mailto:ichankabir@gmail.com/)
 
   <h2>Hi, I'm Ichan Kabir & I ❤️ to code! <img src="https://media.giphy.com/media/mGcNjsfWAjY5AEZNw6/giphy.gif" width="50"></h2>
