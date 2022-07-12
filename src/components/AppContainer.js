@@ -269,7 +269,6 @@ const AppContainer = (props) => {
 
   const handleStart = () => {
     props.focusApp(props.id);
-    if (obj.maximized) restoreWindow();
     setObj((state) => ({ ...state, isDrag: true }));
   };
   const handleStop = () => setObj((state) => ({ ...state, isDrag: false }));
@@ -278,7 +277,10 @@ const AppContainer = (props) => {
       axis="both"
       grid={[1, 1]}
       scale={1}
-      onDrag={checkOverlap}
+      onDrag={() => {
+        obj.maximized && restoreWindow();
+        checkOverlap();
+      }}
       onStart={handleStart}
       onStop={handleStop}
       allowAnyClick={false}
